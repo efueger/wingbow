@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual Testing</title>
+</head>
+<body>
+    <script src="/node_modules/systemjs/dist/system.src.js"></script>
+    <script src="/dist/wingbow.js"></script>
+    <script>
+        System.import('wingbow').then(wingbow => {
+            window.wingbow = wingbow;
+            window.str = wingbow.str;
+            window.Model = wingbow.Model;
+            window.Post = wingbow.Post;
+            console.log('Wingbow ready!');
+        });
+    </script>
+</body>
+</html>

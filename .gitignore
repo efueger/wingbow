@@ -1,0 +1,23 @@
+# Directories
+.karma/**
+.protractor/**
+.sass-cache/**
+.tsc/**
+bower_components/**
+coverage/**
+dist/**
+docs/**
+jspm_packages/**
+node_modules/**
+test/manual/dist/**
+test/manual/node_modules/**
+typings/**
+
+# Files
+firebase-debug.log
+npm-debug.log
+phantomjsdriver.log
+
+# Crap
+.DS_Store
+.Thumbs.db
