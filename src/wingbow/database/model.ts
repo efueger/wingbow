@@ -1,36 +1,17 @@
 /// <reference path="../support/ext.d.ts" />
 
-import { Extend } from '../support/extend';
-import { Jsonable } from '../contracts/jsonable';
 import { Trait } from '../support/trait';
-import {
-    CouldNotFillError,
-    NotDatableError,
-    MassAssignmentError,
-} from './errors';
-import {
-    isFunction,
-} from '../support/fn';
-import {
-    assign,
-    hasOwn,
-} from '../support/obj';
-import {
-    toLowerCase,
-    toPascalCase,
-    toSnakeCase,
-    trim,
-} from '../support/str';
-import {
-    getAttribute,
-    hasAttribute,
-    setAttribute,
-} from './private';
+import { isFunction } from '../support/fn';
+import { Extend } from '../support/extend';
+import { assign, hasOwn } from '../support/obj';
+import { getAttribute, hasAttribute, setAttribute } from './private';
+import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../support/str';
+import { CouldNotFillError, NotDatableError, MassAssignmentError } from './errors';
 
 @Trait([
     Extend
 ])
-export abstract class Model implements Jsonable {
+export abstract class Model {
 
     constructor(attributes = {}) {
         this.fill(attributes);
@@ -72,9 +53,9 @@ export abstract class Model implements Jsonable {
         return {};
     }
 
-    protected connection() :string {
-        return `memory`;
-    }
+    // protected connection() :string {
+    //     return `memory`;
+    // }
 
     protected createdAt() :string {
         return `created_at`;
@@ -84,7 +65,7 @@ export abstract class Model implements Jsonable {
         return [];
     }
 
-    protected fill(attributes :Object) :this {
+    public fill(attributes :Object) :this {
         const writeProtected = this.isWriteProtected();
         for (const key in attributes) {
             if (hasOwn(attributes, key)) {
@@ -102,7 +83,7 @@ export abstract class Model implements Jsonable {
         return [];
     }
 
-    protected fromDate(value :any) :number {
+    public fromDate(value :any) :number {
         const date = new Date(value);
         const timestamp = Number(date);
         if (isNaN(timestamp)) {
@@ -111,7 +92,7 @@ export abstract class Model implements Jsonable {
         return timestamp;
     }
 
-    protected getAttribute(key :string) :any {
+    public getAttribute(key :string) :any {
         if (hasAttribute(this, key) || this.hasGetMutator(key)) {
             return this.getAttributeValue(key);
         }
@@ -122,7 +103,7 @@ export abstract class Model implements Jsonable {
         return getAttribute(this);
     }
 
-    protected getAttributeValue(key :string) :any {
+    public getAttributeValue(key :string) :any {
         const value = getAttribute(this, key);
         if (this.hasGetMutator(key)) {
             return this.callGetMutator(key, value);
@@ -136,7 +117,7 @@ export abstract class Model implements Jsonable {
         return value;
     }
 
-    protected getCasts() :Object {
+    public getCasts() :Object {
         const castables = this.casts();
         const key = this.primaryKey();
         if (this.incrementing()) {
@@ -149,7 +130,7 @@ export abstract class Model implements Jsonable {
         return trim(toLowerCase(this.getCasts()[key]));
     }
 
-    protected getDates() :Array<string> {
+    public getDates() :Array<string> {
         const dates = this.dates();
         if (!this.timestamps()) {
             return dates;
@@ -161,7 +142,7 @@ export abstract class Model implements Jsonable {
         ];
     }
 
-    protected getRelationValue(key :string) :any {
+    public getRelationValue(key :string) :any {
         // TODO
     }
 
@@ -169,7 +150,7 @@ export abstract class Model implements Jsonable {
         return [`*`];
     }
 
-    protected hasCast(key :string, caster :string = null) :boolean {
+    public hasCast(key :string, caster :string = null) :boolean {
         const casts = this.getCasts();
         if (caster === null) {
             return key in casts;
@@ -178,19 +159,19 @@ export abstract class Model implements Jsonable {
 
     }
 
-    protected hasGetMutator(key :string) :boolean {
+    public hasGetMutator(key :string) :boolean {
         const mutator = this.mutatorName(`get`, key);
         return isFunction(this[mutator]);
     }
 
-    protected hasSetMutator(key :string) :boolean {
+    public hasSetMutator(key :string) :boolean {
         const mutator = this.mutatorName(`set`, key);
         return isFunction(this[mutator]);
     }
 
-    protected hidden() :Array<string> {
-        return [`password`];
-    }
+    // protected hidden() :Array<string> {
+    //     return [`password`];
+    // }
 
     protected incrementing() :boolean {
         return true;
@@ -200,7 +181,7 @@ export abstract class Model implements Jsonable {
         return this.hasCast(key, `date`);
     }
 
-    protected isFillable(key :string) :boolean {
+    public isFillable(key :string) :boolean {
         const fillables = this.fillable();
         if (fillables.includes(key)) {
             return true;
@@ -211,12 +192,12 @@ export abstract class Model implements Jsonable {
         throw new CouldNotFillError(key);
     }
 
-    protected isFullyGuarded() :boolean {
+    public isFullyGuarded() :boolean {
         const guards = this.guarded();
         return guards.includes(`*`);
     }
 
-    protected isGuarded(key :string) :boolean {
+    public isGuarded(key :string) :boolean {
         const guards = this.guarded();
         if (guards.includes(key)) {
             return true;
@@ -224,7 +205,7 @@ export abstract class Model implements Jsonable {
         return this.isFullyGuarded();
     }
 
-    protected isWriteProtected() :boolean {
+    public isWriteProtected() :boolean {
         return this.fillable().length === 0 && this.isFullyGuarded();
     }
 
@@ -236,11 +217,11 @@ export abstract class Model implements Jsonable {
         return `id`;
     }
 
-    protected perPage() :number {
-        return 20;
-    }
+    // protected perPage() :number {
+    //     return 20;
+    // }
 
-    protected setAttribute(key :string, value :any) :this {
+    public setAttribute(key :string, value :any) :this {
         if (this.hasSetMutator(key)) {
             value = this.callSetMutator(key, value);
         } else if (this.getDates().includes(key) || this.isDateCastable(key)) {
@@ -250,10 +231,10 @@ export abstract class Model implements Jsonable {
         return this;
     }
 
-    protected table() :string {
-        const name = this.constructor.name;
-        return toSnakeCase(name);
-    }
+    // protected table() :string {
+    //     const name = this.constructor.name;
+    //     return toSnakeCase(name);
+    // }
 
     protected toDate(value :any) :Date {
         return new Date(value);
