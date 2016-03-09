@@ -1,0 +1,50 @@
+sudo: false
+language: node_js
+node_js:
+  - '5'
+
+os:
+  - linux
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+      - gcc-4.8
+      - libc6-dev
+
+cache:
+  directories:
+    - node_modules
+
+env:
+  global:
+    - CC: /usr/bin/gcc-4.8
+    - CXX: /usr/bin/g++-4.8
+    - DISPLAY: ":99.0"
+    - CHROME_BIN=chromium-browser
+
+before_install:
+  - $CXX --version
+  - npm install --global npm
+  - npm --version
+  - npm install --global gulpjs/gulp-cli#4.0 typings
+  - gulp --version
+  - typings --version --no-insight
+
+install:
+  - npm install
+  - typings install
+  - du -sh node_modules || true
+
+before_script:
+  - sh -e /etc/init.d/xvfb start
+  - sleep 5
+
+script:
+  - gulp test:unit
+
+after_success:
+  - npm run coveralls

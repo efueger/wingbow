@@ -1,5 +1,3 @@
-/// <reference path="./ext.d.ts" />
-
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 export function assign(target :any, ...sources :Array<any>) :any {

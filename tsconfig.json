@@ -4,7 +4,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "module": "system",
-    "moduleResolution": "node",
     "noEmitHelpers": false,
     "removeComments": false,
     "sourceMap": false,

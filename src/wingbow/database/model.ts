@@ -1,5 +1,3 @@
-/// <reference path="../support/ext.d.ts" />
-
 import { Trait } from '../support/trait';
 import { isFunction } from '../support/fn';
 import { Extend } from '../support/extend';

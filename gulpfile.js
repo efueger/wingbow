@@ -1,16 +1,19 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 
-var del = require('del');
 var path = require('path');
+
+var del = require('del');
+var history = require('connect-history-api-fallback');
 var KarmaServer = require('karma').Server;
 var merge = require('merge-stream');
-var history = require('connect-history-api-fallback');
-var webdriver = require('gulp-protractor').webdriver_update;
 var remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul');
+var webdriver = require('gulp-protractor').webdriver_update;
 
 var port = 3333;
+var paths = require('./build/config/paths');
 
+var isCI = 'CI' in process.env;
 
 /**
  * Public Tasks
@@ -19,36 +22,52 @@ var port = 3333;
 gulp.task('clean', cleanAll);
 
 gulp.task('build', gulp.series(
-    cleanAll,
+    cleanDist,
     buildTsSrc
 ));
 
-gulp.task('serve', gulp.series(
-    gulp.parallel(watch, serveDist)
+gulp.task('doc', gulp.series(
+    cleanDocs,
+    docTsSrc
 ));
 
 gulp.task('test:e2e', gulp.series(
-    cleanProtractor,
+    cleanTestE2E,
     protractorTsSpec,
     protractorUpdate,
     protractorRun,
-    cleanProtractor
+    cleanTestE2E
 ));
 
 gulp.task('test:manual', gulp.series(
-    cleanAll,
+    cleanDist,
+    cleanTestManual,
     buildTsSrc,
-    gulp.parallel(copyDistTestManual, copyModulesTestManual),
-    gulp.parallel(watch, serveManual)
+    gulp.parallel(copyDistTestManual, copyModulesTestManual)
 ));
 
 gulp.task('test:unit', gulp.series(
-    cleanKarma,
+    cleanCoverage,
+    cleanTestUnit,
     karmaTsSrc,
     karmaTsSpec,
     karmaRun,
-    karmaRemapCoverage,
-    cleanKarma
+    karmaRemapCoverage
+));
+
+gulp.task('serve', gulp.series(
+    'build',
+    gulp.parallel(watch, liveReloadDist)
+));
+
+gulp.task('serve:coverage', gulp.series(
+    'test:unit',
+    gulp.parallel(watch, liveReloadCoverage)
+));
+
+gulp.task('serve:manual', gulp.series(
+    'test:manual',
+    gulp.parallel(watch, liveReloadManual)
 ));
 
 /**
@@ -59,12 +78,28 @@ function cleanAll() {
     return del(['docs', 'coverage', 'dist', 'test/manual/dist', 'test/manual/node_modules', '.karma', '.protractor']);
 }
 
-function cleanKarma() {
-    return del(['.karma']);
+function cleanCoverage() {
+    return del(['coverage']);
 }
 
-function cleanProtractor() {
+function cleanDist() {
+    return del(['dist']);
+}
+
+function cleanDocs() {
+    return del(['docs']);
+}
+
+function cleanTestE2E() {
     return del(['.protractor']);
+}
+
+function cleanTestManual() {
+    return del(['test/manual/dist', 'test/manual/node_modules']);
+}
+
+function cleanTestUnit() {
+    return del(['.karma']);
 }
 
 function copyDistTestManual() {
@@ -77,8 +112,8 @@ function copyModulesTestManual() {
         .pipe(gulp.dest('test/manual/node_modules/systemjs'));
 }
 
-function doc() {
-    return gulp.src(['src/**/*.ts'])
+function docTsSrc() {
+    return gulp.src(['src/**/*.ts', ...paths.typings])
         .pipe($.typedoc({
             module: 'commonjs',
             target: 'ES5',
@@ -89,7 +124,7 @@ function doc() {
 
 function ts(title, filesRoot, filesGlob, filesDest, tsProject) {
 
-    var result = gulp.src([...filesGlob])
+    var result = gulp.src([...filesGlob, ...paths.typings])
         .pipe($.tslint())
         .pipe($.tslint.report('verbose'))
         .pipe($.preprocess())
@@ -100,7 +135,9 @@ function ts(title, filesRoot, filesGlob, filesDest, tsProject) {
         // .pipe($.uglify({
         //     mangle: false
         // }))
-        .pipe($.sourcemaps.write('./'))
+        .pipe($.sourcemaps.write('./', {
+            sourceRoot: path.join(__dirname, '/src')
+        }))
         .pipe($.size({
             title
         }))
@@ -133,7 +170,18 @@ function karmaTs(root) {
     ];
 
     var karmaTsProject = $.typescript.createProject('tsconfig.json', {
-        typescript: require('typescript')
+        typescript: require('typescript'),
+        compilerOptions: {
+            moduleResolution: 'classic',
+            baseUrl: '.',
+            paths: {
+                '*': ['*', 'src/*']
+            },
+            rootDirs: [
+                'src',
+                'test'
+            ],
+        }
     });
 
     return ts('karma', filesRoot, filesGlob, filesDest, karmaTsProject);
@@ -149,19 +197,24 @@ function karmaTsSpec() {
 }
 
 function karmaRun(done) {
-    return new KarmaServer({
-        configFile: __dirname + '/karma.conf.js'
-    }, done).start();
+    new KarmaServer({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true,
+    }, function (err) {
+        done(isCI ? err : null);
+    }).start();
 }
 
 function karmaRemapCoverage() {
     return gulp.src('coverage/json/coverage-js.json')
         .pipe(remapIstanbul({
             reports: {
+                html: 'coverage/html-report',
                 json: 'coverage/json/coverage-ts.json',
-                html: 'coverage/html-report'
+                lcovonly: 'coverage/lcov/lcov.info',
+                'text-summary': null,
             }
-    }));
+        }));
 }
 
 function protractorTsSpec() {
@@ -193,20 +246,23 @@ function protractorRun() {
 }
 
 function watch() {
-    gulp.watch(['wingbow.ts', 'src/**/*.ts', 'test/manual/index.html'], gulp.series(buildTsSrc, copyDistTestManual, copyModulesTestManual));
-    // gulp.watch(['wingbow.ts', 'src/**/*.ts', 'test/manual/index.html'], gulp.series(buildTsSrc, 'test:unit'));
-    // gulp.watch(['test/unit/**/*.ts'], gulp.series('test:unit'));
+    gulp.watch(['src/**/*.ts', 'test/manual/index.html'], gulp.series('test:manual', 'test:unit'));
+    gulp.watch(['test/unit/**/*.ts'], gulp.series('test:unit'));
 }
 
-function serveDist() {
-    return livereload('dist');
+function liveReloadCoverage() {
+    return liveReload('coverage/html-report');
 }
 
-function serveManual() {
-    return livereload('test/manual');
+function liveReloadDist() {
+    return liveReload('dist');
 }
 
-function livereload(root) {
+function liveReloadManual() {
+    return liveReload('test/manual');
+}
+
+function liveReload(root) {
     return $.connect.server({
         root: root,
         livereload: true,
