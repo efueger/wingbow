@@ -15,7 +15,7 @@ module.exports = function (karma) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            'PhantomJS2'
+            'PhantomJS'
         ],
 
         // the maximum bootup time for a browser
@@ -115,7 +115,7 @@ module.exports = function (karma) {
     };
 
     /**
-     * `PhantomJS2` support is limited in Travis CI so we use `Chrome` instead.
+     * `PhantomJS` support is limited in Travis CI so we use `Chrome` instead.
      * Note that we also need to configure Travis so it enables Chrome.
      * See `before_script` in the `.travis.yml` file.
      */

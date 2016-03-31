@@ -6,7 +6,6 @@ var path = require('path');
 var del = require('del');
 var history = require('connect-history-api-fallback');
 var KarmaServer = require('karma').Server;
-var merge = require('merge-stream');
 var remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul');
 var webdriver = require('gulp-protractor').webdriver_update;
 
