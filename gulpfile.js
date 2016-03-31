@@ -104,16 +104,19 @@ function cleanTestUnit() {
 
 function copyDistTestManual() {
     return gulp.src(['dist/**/*'])
+        .pipe($.plumber())
         .pipe(gulp.dest('test/manual/dist'));
 }
 
 function copyModulesTestManual() {
-    return gulp.src(['node_modules/systemjs/**/*'])
-        .pipe(gulp.dest('test/manual/node_modules/systemjs'));
+    return gulp.src(['node_modules/{es6-shim,es7-shim,systemjs}/**/*'])
+        .pipe($.plumber())
+        .pipe(gulp.dest('test/manual/node_modules/'));
 }
 
 function docTsSrc() {
     return gulp.src(['src/**/*.ts', ...paths.typings])
+        .pipe($.plumber())
         .pipe($.typedoc({
             module: 'commonjs',
             target: 'ES5',
@@ -125,6 +128,7 @@ function docTsSrc() {
 function ts(title, filesRoot, filesGlob, filesDest, tsProject) {
 
     var result = gulp.src([...filesGlob, ...paths.typings])
+        .pipe($.plumber())
         .pipe($.tslint())
         .pipe($.tslint.report('verbose'))
         .pipe($.preprocess())
@@ -207,6 +211,7 @@ function karmaRun(done) {
 
 function karmaRemapCoverage() {
     return gulp.src('coverage/json/coverage-js.json')
+        .pipe($.plumber())
         .pipe(remapIstanbul({
             reports: {
                 html: 'coverage/html-report',
@@ -239,6 +244,7 @@ function protractorUpdate(done) {
 
 function protractorRun() {
     return gulp.src('.protractor/test/e2e/**/*.spec.js')
+        .pipe($.plumber())
         .pipe($.protractor.protractor({
             configFile: 'protractor.conf.js'
         }))

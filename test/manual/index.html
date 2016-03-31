@@ -5,11 +5,26 @@
     <title>Manual Testing</title>
 </head>
 <body>
+    <script src="/node_modules/es6-shim/es6-shim.js"></script>
+    <script src="/node_modules/es7-shim/dist/es7-shim.js"></script>
     <script src="/node_modules/systemjs/dist/system.src.js"></script>
     <script src="/dist/wingbow.js"></script>
     <script>
         System.import('wingbow').then(wingbow => {
             window.wingbow = wingbow;
+            window.Model = wingbow.database.Model;
+            window.Post = Model.extend({
+                $constructor: function (_super) {
+                    function Post() {
+                        _super.apply(this, arguments);
+                    }
+                    return Post;
+                },
+                fillable: function () {
+                    return ['a', 'b', 'c'];
+                },
+            });
+            window.p = new Post({a: 1, b: 2, c: 3});
             console.log('Wingbow ready!');
         });
     </script>

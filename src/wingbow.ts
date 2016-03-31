@@ -1,1 +1,2 @@
-export * from './wingbow/database';
+import * as database from './wingbow/database';
+export { database };

@@ -1,9 +1,13 @@
-export function lcfirst(str :string) :string {
-    return toLowerCase(str.charAt(0)) + str.substr(1);
+function simplifySymbols(str :string) :string {
+    return str.replace(/(_|\-)+/g, `_`);
 }
 
-export function simplifySymbols(str :string) :string {
-    return str.replace(/(_|\-)+/g, `_`);
+function trimSymbols(str :string) :string {
+    return trim(str).replace(/^(_|\-)+/g, ``).replace(/(_|\-)+$/g, ``);
+}
+
+export function lcfirst(str :string) :string {
+    return toLowerCase(str.charAt(0)) + str.substr(1);
 }
 
 export function toCamelCase(str :string) :string {
@@ -26,24 +30,20 @@ export function toPascalCase(str :string) :string {
     return ucfirst(toCamelCase(str));
 }
 
+export function toSnakeCase(str :string) :string {
+    return toLowerCase(trimSymbols(
+        trimSymbols(simplifySymbols(str))
+        .replace(/[A-Z]*[A-Z]/g, m => `_${m}`)
+        .replace(/_+/g, `_`)
+    ));
+}
+
 export function toUpperCase(str :string) :string {
     return str.toUpperCase();
 }
 
-export function toSnakeCase(str :string) :string {
-    return toLowerCase(
-        lcfirst(trimSymbols(simplifySymbols(str)))
-        .replace(/[A-Z]/g, m => `_${m}`)
-        .replace(/_+/g, `_`)
-    );
-}
-
 export function trim(str :string) :string {
     return str.trim();
-}
-
-export function trimSymbols(str :string) :string {
-    return trim(str).replace(/^(_|\-)+/g, ``).replace(/(_|\-)+$/g, ``);
 }
 
 export function ucfirst(str :string) :string {

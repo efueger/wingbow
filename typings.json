@@ -1,9 +1,6 @@
 {
-  "dependencies": {},
-  "devDependencies": {},
   "ambientDependencies": {
-    "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#dd638012d63e069f2c99d06ef4dcc9616a943ee4",
-    "selenium-webdriver": "github:DefinitelyTyped/DefinitelyTyped/selenium-webdriver/selenium-webdriver.d.ts#a83677ed13add14c2ab06c7325d182d0ba2784ea",
-    "systemjs": "github:DefinitelyTyped/DefinitelyTyped/systemjs/systemjs.d.ts#83af898254689400de8fb6495c34119ae57ec3fe"
+    "jasmine": "registry:dt/jasmine#2.2.0+20160308082659",
+    "systemjs": "registry:dt/systemjs#0.18.4+20150723174523"
   }
 }
