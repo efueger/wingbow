@@ -11,3 +11,5 @@ describe(`wingbow`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

@@ -7,3 +7,5 @@ describe(`DB`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

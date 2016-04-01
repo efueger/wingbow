@@ -106,3 +106,5 @@ describe(`getClass`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

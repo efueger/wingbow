@@ -83,7 +83,7 @@ describe(`store`, () => {
         it(`should should be able to set attributes`, () => {
             mockAttributes.one = `One`;
             mockAttributes.two = `Two`;
-            setRawAttributes(mockInstance, mockAttributes)
+            setRawAttributes(mockInstance, mockAttributes);
             expect(mockAttributesStore.get(mockInstance)).toEqual({
                 one: `One`,
                 two: `Two`,
@@ -95,8 +95,8 @@ describe(`store`, () => {
     describe(`setRawAttribute`, () => {
 
         it(`should should be able to set a single attribute`, () => {
-            setRawAttribute(mockInstance, `one`, `ONE`)
-            setRawAttribute(mockInstance, `two`, `TWO`)
+            setRawAttribute(mockInstance, `one`, `ONE`);
+            setRawAttribute(mockInstance, `two`, `TWO`);
             expect(mockAttributesStore.get(mockInstance)).toEqual({
                 one: `ONE`,
                 two: `TWO`,
@@ -110,7 +110,7 @@ describe(`store`, () => {
         it(`should should be able to set Originals`, () => {
             mockOriginals.one = `One`;
             mockOriginals.two = `Two`;
-            setRawOriginals(mockInstance, mockOriginals)
+            setRawOriginals(mockInstance, mockOriginals);
             expect(mockOriginalsStore.get(mockInstance)).toEqual({
                 one: `One`,
                 two: `Two`,

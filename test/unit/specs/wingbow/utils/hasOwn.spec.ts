@@ -66,3 +66,5 @@ describe(`hasOwn`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

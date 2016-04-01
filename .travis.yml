@@ -44,7 +44,7 @@ before_script:
   - sleep 5
 
 script:
-  - gulp test:unit
+  - gulp ci
 
 after_success:
   - npm run coveralls

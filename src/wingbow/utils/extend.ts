@@ -12,13 +12,13 @@ function mapValueForDescriptor(values) {
     }, {});
 }
 
-export interface rawProtoPropsInerface {
+export interface RawProtoPropsInterface {
     $constructor? :Function;
 }
 
 export function Extend (Target) {
 
-    Target.extend = (rawProtoProps :rawProtoPropsInerface = {}, staticProps :Object = {}) :Function => {
+    Target.extend = (rawProtoProps :RawProtoPropsInterface = {}, staticProps :Object = {}) :Function => {
 
         let Surrogate = null;
         const protoProps = mapValueForDescriptor(rawProtoProps);
@@ -37,6 +37,6 @@ export function Extend (Target) {
 
         return Surrogate;
 
-    }
+    };
 
 }

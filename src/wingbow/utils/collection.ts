@@ -5,7 +5,7 @@ import { BaseCollection, BaseCollectionInstance } from './baseCollection';
 
 export interface CollectionInstance<T> extends BaseCollectionInstance<T> {
     readonly length :number;
-    readonly [n: number]: T;
+    readonly [n :number] :T;
 }
 
 export interface Collection<T> {
@@ -74,6 +74,7 @@ export class Collection<T> extends BaseCollection<T> {
             operator = `===`;
         }
         switch (operator) {
+            /* tslint:disable:triple-equals */
             case `==`: return this.filter(item => item[key] == value);
             case `===`: return this.filter(item => item[key] === value);
             case `>`: return this.filter(item => toNumberOrNaN(item[key]) > value);
@@ -82,6 +83,7 @@ export class Collection<T> extends BaseCollection<T> {
             case `<=`: return this.filter(item => toNumberOrNaN(item[key]) <= value);
             case `!=`: return this.filter(item => item[key] != value);
             case `!==`: return this.filter(item => item[key] !== value);
+            /* tslint:enable:triple-equals */
             default:
                 throw new IllegalOperatorError();
         }

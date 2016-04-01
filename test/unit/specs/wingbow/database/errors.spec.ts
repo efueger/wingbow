@@ -57,3 +57,5 @@ describe(`errors`, () => {
 
 
 });
+
+/* vim: set cc=0 : */

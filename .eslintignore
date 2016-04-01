@@ -1,0 +1,9 @@
+# Directories
+coverage/**
+dist/**
+docs/**
+jspm_packages/**
+node_modules/**
+
+# Files
+build/includes/**/*.tmpl.js

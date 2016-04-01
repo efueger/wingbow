@@ -139,14 +139,14 @@ describe(`extend`, () => {
 
             describe(`methods and properties`, () => {
 
-                it(`should reference the "collision" child methods`, ()=> {
+                it(`should reference the "collision" child methods`, () => {
                     expect(hasOwn(ChildConstructor.prototype, `collisionMethod`)).toBe(true);
                     expect(hasOwn(childInstance, `collisionMethod`)).toBe(false);
                     expect(ChildConstructor.prototype.collisionMethod).toBe(childCollisionMethodFn);
                     expect(childInstance.collisionMethod).toBe(childCollisionMethodFn);
                 });
 
-                it(`should reference the "collision" child properties`, ()=> {
+                it(`should reference the "collision" child properties`, () => {
                     expect(hasOwn(ChildConstructor.prototype, `collisionProp`)).toBe(true);
                     expect(hasOwn(childInstance, `collisionProp`)).toBe(false);
                     expect(ChildConstructor.prototype.collisionProp).toBe(childCollisionPropObj);
@@ -160,7 +160,7 @@ describe(`extend`, () => {
                     expect(childInstance.surrogateInstanceMethod).toBe(surrogateInstanceMethodFn);
                 });
 
-                it(`should reference the "instance" parent and surrogate properties`, ()=> {
+                it(`should reference the "instance" parent and surrogate properties`, () => {
                     expect(hasOwn(childInstance, `parentInstanceProp`)).toBe(true);
                     expect(childInstance.parentInstanceProp).toBe(parentInstancePropObj);
                     expect(hasOwn(childInstance, `surrogateInstanceProp`)).toBe(true);
@@ -176,7 +176,7 @@ describe(`extend`, () => {
                     expect(ChildConstructor.childStaticMethod).toBe(childStaticMethodFn);
                 });
 
-                it(`should reference the "static" parent, surrogate, and child properties`, ()=> {
+                it(`should reference the "static" parent, surrogate, and child properties`, () => {
                     expect(hasOwn(ChildConstructor, `parentStaticProp`)).toBe(true);
                     expect(ChildConstructor.parentStaticProp).toBe(parentStaticPropObj);
                     expect(hasOwn(ChildConstructor, `surrogateStaticProp`)).toBe(true);
@@ -185,7 +185,7 @@ describe(`extend`, () => {
                     expect(ChildConstructor.childStaticProp).toBe(childStaticPropObj);
                 });
 
-                it(`should reference the "prototype" parent, surrogate, and child methods`, ()=> {
+                it(`should reference the "prototype" parent, surrogate, and child methods`, () => {
                     expect(hasOwn(ChildConstructor.prototype, `parentProtoMethod`)).toBe(false);
                     expect(hasOwn(childInstance, `parentProtoMethod`)).toBe(false);
                     expect(ChildConstructor.prototype.parentProtoMethod).toBe(parentProtoMethodFn);
@@ -200,7 +200,7 @@ describe(`extend`, () => {
                     expect(childInstance.childProtoMethod).toBe(childProtoMethodFn);
                 });
 
-                it(`should reference the "prototype" parent, surrogate, and child properties`, ()=> {
+                it(`should reference the "prototype" parent, surrogate, and child properties`, () => {
                     expect(hasOwn(ChildConstructor.prototype.parentProtoProp)).toBe(false);
                     expect(hasOwn(childInstance.parentProtoProp)).toBe(false);
                     expect(ChildConstructor.prototype.parentProtoProp).toBe(parentProtoPropObj);
@@ -245,14 +245,14 @@ describe(`extend`, () => {
 
             describe(`methods and properties`, () => {
 
-                it(`should reference the "collision" child methods`, ()=> {
+                it(`should reference the "collision" child methods`, () => {
                     expect(hasOwn(ChildConstructor.prototype, `collisionMethod`)).toBe(true);
                     expect(hasOwn(childInstance, `collisionMethod`)).toBe(false);
                     expect(ChildConstructor.prototype.collisionMethod).toBe(childCollisionMethodFn);
                     expect(childInstance.collisionMethod).toBe(childCollisionMethodFn);
                 });
 
-                it(`should reference the "collision" child properties`, ()=> {
+                it(`should reference the "collision" child properties`, () => {
                     expect(hasOwn(ChildConstructor.prototype, `collisionProp`)).toBe(true);
                     expect(hasOwn(childInstance, `collisionProp`)).toBe(false);
                     expect(ChildConstructor.prototype.collisionProp).toBe(childCollisionPropObj);
@@ -264,7 +264,7 @@ describe(`extend`, () => {
                     expect(childInstance.parentInstanceMethod).toBe(parentInstanceMethodFn);
                 });
 
-                it(`should reference the "instance" parent properties`, ()=> {
+                it(`should reference the "instance" parent properties`, () => {
                     expect(hasOwn(childInstance, `parentInstanceProp`)).toBe(true);
                     expect(childInstance.parentInstanceProp).toBe(parentInstancePropObj);
                 });
@@ -276,14 +276,14 @@ describe(`extend`, () => {
                     expect(ChildConstructor.childStaticMethod).toBe(childStaticMethodFn);
                 });
 
-                it(`should reference the "static" parent and child properties`, ()=> {
+                it(`should reference the "static" parent and child properties`, () => {
                     expect(hasOwn(ChildConstructor, `parentStaticProp`)).toBe(true);
                     expect(ChildConstructor.parentStaticProp).toBe(parentStaticPropObj);
                     expect(hasOwn(ChildConstructor, `childStaticProp`)).toBe(true);
                     expect(ChildConstructor.childStaticProp).toBe(childStaticPropObj);
                 });
 
-                it(`should reference the "prototype" parent and child methods`, ()=> {
+                it(`should reference the "prototype" parent and child methods`, () => {
                     expect(hasOwn(ChildConstructor.prototype, `parentProtoMethod`)).toBe(false);
                     expect(hasOwn(childInstance, `parentProtoMethod`)).toBe(false);
                     expect(ChildConstructor.prototype.parentProtoMethod).toBe(parentProtoMethodFn);
@@ -294,7 +294,7 @@ describe(`extend`, () => {
                     expect(childInstance.childProtoMethod).toBe(childProtoMethodFn);
                 });
 
-                it(`should reference the "prototype" parent and child properties`, ()=> {
+                it(`should reference the "prototype" parent and child properties`, () => {
                     expect(hasOwn(ChildConstructor.prototype.parentProtoProp)).toBe(false);
                     expect(hasOwn(childInstance.parentProtoProp)).toBe(false);
                     expect(ChildConstructor.prototype.parentProtoProp).toBe(parentProtoPropObj);
@@ -312,3 +312,5 @@ describe(`extend`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

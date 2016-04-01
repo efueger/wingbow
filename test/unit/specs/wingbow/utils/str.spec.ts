@@ -13,7 +13,7 @@ import {
 
 describe(`str`, () => {
 
-    describe(`lcfirst`, () =>{
+    describe(`lcfirst`, () => {
 
         it(`should do something`, () => {
            expect(lcfirst(`aaa-aaa_aaa`)).toBe(`aaa-aaa_aaa`);
@@ -22,7 +22,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`toCamelCase`, () =>{
+    describe(`toCamelCase`, () => {
 
         it(`should do something`, () => {
            expect(toCamelCase(`aaa-aaa_aaa`)).toBe(`aaaAaaAaa`);
@@ -31,7 +31,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`toConstantCase`, () =>{
+    describe(`toConstantCase`, () => {
 
         it(`should do something`, () => {
            expect(toConstantCase(`aaa-aaa_aaa`)).toBe(`AAA_AAA_AAA`);
@@ -40,7 +40,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`toDashCase`, () =>{
+    describe(`toDashCase`, () => {
 
         it(`should do something`, () => {
            expect(toDashCase(`aaa-aaa_aaa`)).toBe(`aaa-aaa-aaa`);
@@ -49,7 +49,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`toLowerCase`, () =>{
+    describe(`toLowerCase`, () => {
 
         it(`should do something`, () => {
            expect(toLowerCase(`aaa-aaa_aaa`)).toBe(`aaa-aaa_aaa`);
@@ -58,7 +58,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`toPascalCase`, () =>{
+    describe(`toPascalCase`, () => {
 
         it(`should do something`, () => {
            expect(toPascalCase(`aaa-aaa_aaa`)).toBe(`AaaAaaAaa`);
@@ -67,7 +67,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`toSnakeCase`, () =>{
+    describe(`toSnakeCase`, () => {
 
         it(`should do something`, () => {
            expect(toSnakeCase(`aaa-aaa_aaa`)).toBe(`aaa_aaa_aaa`);
@@ -76,7 +76,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`toUpperCase`, () =>{
+    describe(`toUpperCase`, () => {
 
         it(`should do something`, () => {
            expect(toUpperCase(`aaa-aaa_aaa`)).toBe(`AAA-AAA_AAA`);
@@ -85,7 +85,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`trim`, () =>{
+    describe(`trim`, () => {
 
         it(`should do something`, () => {
            expect(trim(`aaa-aaa_aaa`)).toBe(`aaa-aaa_aaa`);
@@ -94,7 +94,7 @@ describe(`str`, () => {
 
     });
 
-    describe(`ucfirst`, () =>{
+    describe(`ucfirst`, () => {
 
         it(`should do something`, () => {
            expect(ucfirst(`aaa-aaa_aaa`)).toBe(`Aaa-aaa_aaa`);
@@ -104,3 +104,5 @@ describe(`str`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

@@ -94,3 +94,5 @@ describe(`is`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

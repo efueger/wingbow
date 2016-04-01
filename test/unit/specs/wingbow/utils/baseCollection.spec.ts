@@ -24,3 +24,5 @@ describe(`BaseCollection`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

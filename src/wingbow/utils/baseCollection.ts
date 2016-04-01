@@ -7,7 +7,7 @@ export function ToUint32(value :any) :number {
 
 export interface BaseCollectionInstance<T> extends Array<T> {
     length :number;
-    [n: number]: T;
+    [n :number] :T;
 }
 
 export interface BaseCollection<T> {
@@ -22,7 +22,7 @@ export const BaseCollection :BaseCollection<any> = function(...args) {
     Object.defineProperty(this, 'length', {
         get: function() {
             let result = -1;
-            for (var key in this) {
+            for (let key in this) {
                 if (hasOwn(this, key)) {
                     const index = ToUint32(key);
                     if (String(index) !== key) {
@@ -42,7 +42,7 @@ export const BaseCollection :BaseCollection<any> = function(...args) {
             }
             return Math.max(_length, result + 1);
         },
-        set: function(value: any) {
+        set: function(value :any) {
             const index = ToUint32(value);
             if (index !== Number(value)) {
                 throw new RangeError();

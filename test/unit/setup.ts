@@ -2,40 +2,41 @@ Error.stackTraceLimit = Infinity;
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
-__karma__.loaded = function () {};
+__karma__.loaded = () => {};
 
-if (typeof __karma__.error !== 'function') {
-    __karma__.error = function (err) {
+if (typeof __karma__.error !== `function`) {
+    __karma__.error = err => {
         throw err;
     };
 }
 
+const paths = {
+    tmp: {
+        karma: `.karma`,
+    },
+};
+
 System.config({
     defaultExtensions: true,
     map: {
-        src: '/base/.karma/src'
+        src: `/base/${paths.tmp.karma}/src`,
     },
     packages: {
-        '/base/.karma/src': {
-            format: 'register'
-        }
-    }
+        [`/base/${paths.tmp.karma}/src`]: {
+            format: `register`,
+        },
+    },
 });
 
 Promise.resolve()
-.then(function () {
-    var imports = Object.keys(window.__karma__.files)
-    .filter(function (path) {
-        return /.spec\.js$/.test(path);
-    })
-    .map(function (path) {
-        return System.import(path);
-    });
-    return Promise.all(imports);
-})
-.then(function () {
+.then(() =>
+    Promise.all(Object.keys(window.__karma__.files)
+    .filter(path => /.spec\.js$/.test(path))
+    .map(path => System.import(path)))
+)
+.then(() => {
     __karma__.start();
 })
-.catch(function (err) {
+.catch(err => {
     __karma__.error(err.stack || err);
 });

@@ -27,7 +27,7 @@ export abstract class Model {
         return this[mutator](value);
     }
 
-    protected castAttribute(key :string, value: any) :any {
+    protected castAttribute(key :string, value :any) :any {
         const casts = this.getCasts();
         const caster = casts[key];
         switch (caster) {

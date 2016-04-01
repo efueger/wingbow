@@ -15,3 +15,5 @@ describe(`database`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

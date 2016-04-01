@@ -351,3 +351,5 @@ describe(`Collection`, () => {
     });
 
 });
+
+/* vim: set cc=0 : */

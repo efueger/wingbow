@@ -10,10 +10,10 @@ let CastExample = null;
 describe(`Model`, () => {
 
     beforeEach(() => {
-        class _MockModel extends Model {
+        class LocalMockModel extends Model {
             fillable() { return [`a`, `b`, `c`]; }
         }
-        MockModel = _MockModel;
+        MockModel = LocalMockModel;
         attributes = {a: 1, b: 2, c: 3};
         model = new MockModel(attributes);
         AttributeExample = function() { this.localProp = false; };
@@ -77,7 +77,7 @@ describe(`Model`, () => {
             }
             model = new MockModel(attributes);
             expect(() => {
-                model.getAttributes()
+                model.getAttributes();
             }).toThrowError(IllegalCastTypeError);
         });
 
@@ -101,7 +101,7 @@ describe(`Model`, () => {
                 fillable() { return [`localProp`]; }
             }
             attributes = new AttributeExample();
-            model = new MockModel(attributes)
+            model = new MockModel(attributes);
             expect(model.getAttributes()).toEqual({localProp: false});
         });
 
