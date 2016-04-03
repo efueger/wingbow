@@ -15,7 +15,6 @@ module.exports = function compile(filesRoot, filesDest, filesGlob, options) {
     const tsProject = $.typescript.createProject(`tsconfig.json`, config);
     const result = gulp.src([...filesGlob, ...paths.typings.all])
         .pipe($.plumber(plumb))
-        .pipe($.preprocess())
         .pipe($.sourcemaps.init())
         .pipe($.typescript(tsProject));
     return result.js
