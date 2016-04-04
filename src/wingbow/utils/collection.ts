@@ -1,3 +1,4 @@
+import { Jsonable } from './types';
 import { isFunction } from './is';
 import { toNumberOrNaN } from './to';
 import { IllegalOperatorError } from './errors';
@@ -58,7 +59,7 @@ export class Collection<T> extends BaseCollection<T> {
         return Array.from<T>(this);
     }
 
-    where(key? :string, operator? :string|Function, value? :any) :Collection<T> {
+    where(key? :string, operator? :string|Function, value? :Jsonable) :Collection<T> {
         if (arguments.length === 0) {
             return this.filter(item => false);
         }

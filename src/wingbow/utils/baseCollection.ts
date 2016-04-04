@@ -20,7 +20,7 @@ export const BaseCollection :BaseCollection<any> = function(...args) {
     this.push.apply(this, args);
     let _length = 0;
     Object.defineProperty(this, 'length', {
-        get: function() {
+        get: function() :number {
             let result = -1;
             for (let key in this) {
                 if (hasOwn(this, key)) {
@@ -42,7 +42,7 @@ export const BaseCollection :BaseCollection<any> = function(...args) {
             }
             return Math.max(_length, result + 1);
         },
-        set: function(value :any) {
+        set: function(value :any) :void {
             const index = ToUint32(value);
             if (index !== Number(value)) {
                 throw new RangeError();

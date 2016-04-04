@@ -20,7 +20,7 @@ export function toDate(value :any = null) :Date {
     return new Date(value);
 }
 
-export function toJSON(value :any = null) :any {
+export function toJSON(value :any = null) :string {
     return JSON.stringify(value);
 }
 

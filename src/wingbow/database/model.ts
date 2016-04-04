@@ -2,6 +2,7 @@ import { Trait } from '../utils/trait';
 import { Extend } from '../utils/extend';
 import { hasOwn } from '../utils/hasOwn';
 import { isFunction, isString } from '../utils/is';
+import { Jsonable, JsonableObject } from '../utils/types';
 import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../utils/str';
 import { toArray, toDate, toJSON, toNumber, toObject, toTimestamp } from '../utils/to';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError  } from './errors';
@@ -17,17 +18,17 @@ export abstract class Model {
         this.fill(attributes);
     }
 
-    protected callGetMutator(key :string, value :any) :any {
+    protected callGetMutator(key :string, value :Jsonable) :Jsonable {
         const mutator = this.mutatorName(`get`, key);
         return this[mutator](value);
     }
 
-    protected callSetMutator(key :string, value :any) :any {
+    protected callSetMutator(key :string, value :Jsonable) :Jsonable {
         const mutator = this.mutatorName(`set`, key);
         return this[mutator](value);
     }
 
-    protected castAttribute(key :string, value :any) :any {
+    protected castAttribute(key :string, value :Jsonable) :Jsonable {
         const casts = this.getCasts();
         const caster = casts[key];
         switch (caster) {
@@ -82,14 +83,14 @@ export abstract class Model {
         return [];
     }
 
-    public getAttribute(key :string) :any {
+    public getAttribute(key :string) :Jsonable|void {
         if (this.hasAttribute(key) || this.hasGetMutator(key)) {
             return this.getAttributeValue(key);
         }
         return this.getRelationValue(key);
     }
 
-    public getAttributes() :any {
+    public getAttributes() :JsonableObject {
         const rawAttributes = getRawAttributes(this);
         const attributes = {};
         for (const key in rawAttributes) {
@@ -98,7 +99,7 @@ export abstract class Model {
         return attributes;
     }
 
-    public getAttributeValue(key :string) :any {
+    public getAttributeValue(key :string) :Jsonable {
         const value = getRawAttribute(this, key);
         if (this.hasGetMutator(key)) {
             return this.callGetMutator(key, value);
@@ -152,7 +153,7 @@ export abstract class Model {
         ];
     }
 
-    public getRelationValue(key :string) :any {
+    public getRelationValue(key :string) :void {
         // TODO
     }
 
@@ -236,7 +237,7 @@ export abstract class Model {
         return `id`;
     }
 
-    public setAttribute(key :string, value :any) :void {
+    public setAttribute(key :string, value :Jsonable) :void {
         if (this.hasSetMutator(key)) {
             value = this.callSetMutator(key, value);
         } else if (this.getDates().includes(key) || this.isDateCastable(key)) {
@@ -259,7 +260,7 @@ export abstract class Model {
         return true;
     }
 
-    public toJSON() :any {
+    public toJSON() :string {
         const attributes = getRawAttributes(this);
         return JSON.stringify(attributes);
     }

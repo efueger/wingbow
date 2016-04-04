@@ -1,48 +1,50 @@
-let attributesStore = new Map();
-let originalsStore = new Map();
+import { Jsonable, JsonableObject } from '../utils/types';
 
-function getRaw(store :any, instance :any) :any {
+let attributesStore = new Map<any, any>();
+let originalsStore = new Map<any, any>();
+
+function getStoreInstance<K>(store :Map<K, JsonableObject>, instance :K) :JsonableObject {
     if (!store.has(instance)) {
-        store.set(instance, {});
+        store.set(instance, {} as JsonableObject);
     }
     return store.get(instance);
 }
 
-function setRaw(store :any, instance :any, data :any) :void {
+function setStoreInstance<K, V extends JsonableObject>(store :Map<K, V>, instance :K, data :V) :void {
     store.set(instance, data);
 }
 
-export function _setAttributesStore(store :any) :void {
+export function _setAttributesStore<K, V extends JsonableObject>(store :Map<K, V>) :void {
     attributesStore = store;
 }
 
-export function _setOriginalsStore(store :any) :void {
+export function _setOriginalsStore<K, V extends JsonableObject>(store :Map<K, V>) :void {
     originalsStore = store;
 }
 
-export function getRawAttribute(instance :any, key :string) :any {
-    const attributes = getRawAttributes(instance);
+export function getRawAttribute<K>(instance :K, key :string) :Jsonable {
+    const attributes = getRawAttributes<K>(instance);
     return attributes[key];
 }
 
-export function getRawAttributes(instance :any) :any {
-    return getRaw(attributesStore, instance);
+export function getRawAttributes<K>(instance :K) :JsonableObject {
+    return getStoreInstance<K>(attributesStore, instance);
 }
 
-export function getRawOriginals(instance :any) :any {
-    return getRaw(originalsStore, instance);
+export function getRawOriginals<K>(instance :K) :JsonableObject {
+    return getStoreInstance<K>(originalsStore, instance);
 }
 
-export function setRawAttribute(instance :any, key :string, value :any) :void {
-    const attributes = getRawAttributes(instance);
+export function setRawAttribute<K, V extends JsonableObject>(instance :K, key :string, value :Jsonable) :void {
+    const attributes = getRawAttributes<K>(instance);
     attributes[key] = value;
-    setRawAttributes(instance, attributes);
+    setRawAttributes<K, JsonableObject>(instance, attributes);
 }
 
-export function setRawAttributes(instance :any, data :any) :void {
-    setRaw(attributesStore, instance, data);
+export function setRawAttributes<K, V extends JsonableObject>(instance :K, data :V) :void {
+    setStoreInstance<K, JsonableObject>(attributesStore, instance, data);
 }
 
-export function setRawOriginals(instance :any, data :any) :void {
-    setRaw(originalsStore, instance, data);
+export function setRawOriginals<K, V extends JsonableObject>(instance :K, data :V) :void {
+    setStoreInstance<K, JsonableObject>(originalsStore, instance, data);
 }
