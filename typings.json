@@ -1,6 +1,9 @@
 {
+  "name": "wingbow",
+  "version": false,
+  "dependencies": {},
   "ambientDependencies": {
-    "jasmine": "registry:dt/jasmine#2.2.0+20160308082659",
-    "systemjs": "registry:dt/systemjs#0.18.4+20150723174523"
+    "jasmine": "registry:dt/jasmine#2.2.0+20160317120654",
+    "systemjs": "registry:dt/systemjs#0.18.4+20160316155526"
   }
 }

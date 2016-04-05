@@ -18,7 +18,8 @@
   },
   "scripts": {
     "test": "gulp test",
-    "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls",
+    "typings": "typings"
   },
   "dependencies": {},
   "devDependencies": {
