@@ -36,11 +36,6 @@ const files = {
     typings: `typings.json`,
 };
 
-exports.build = {
-    entry: `wingbow.ts`,
-    exit: `wingbow.js`,
-};
-
 exports.clean = {
     coverage: [
         `${dirs.coverage}`,
@@ -93,8 +88,8 @@ exports.coverage = {
 };
 
 exports.dist = {
-    build: `${dirs.dist}`,
     docs: `${dirs.docs}`,
+    make: `${dirs.dist}`,
     coverage: `${dirs.coverage}`,
     testManual: `${dirs.testManual}`,
     testManualDist: `${dirs.testManualDist}`,
@@ -133,6 +128,11 @@ exports.lint = {
     yml: [
         `${files.travis}`,
     ],
+};
+
+exports.make = {
+    entry: `wingbow.ts`,
+    exit: `wingbow.js`,
 };
 
 exports.tmp = {

@@ -7,7 +7,7 @@ gulp.task(`default`, gulp.series(
     tasks.clean.all,
     tasks.test.unit,
     gulp.parallel(
-        tasks.build.all,
+        tasks.make.all,
         tasks.doc.all,
         tasks.lint.all
     )

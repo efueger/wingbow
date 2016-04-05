@@ -4,8 +4,8 @@ const $ = require(`gulp-load-plugins`)();
 const history = require(`connect-history-api-fallback`);
 const port = 3333;
 
-const build = require(`./build`);
 const doc = require(`./doc`);
+const make = require(`./make`);
 const test = require(`./test`);
 const watch = require(`./watch`);
 
@@ -34,10 +34,10 @@ serveDist.displayName = `serve:dist`;
 gulp.task(serveDist);
 function serveDist(done) {
     gulp.series(
-        build.all,
+        make.all,
         gulp.parallel(
             watch.all,
-            livereload(paths.dist.build)
+            livereload(paths.dist.make)
         )
     )(done);
 }

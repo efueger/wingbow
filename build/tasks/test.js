@@ -5,8 +5,8 @@ const remapIstanbul = require(`remap-istanbul/lib/gulpRemapIstanbul`);
 const $ = require(`gulp-load-plugins`)();
 const webdriver = require(`gulp-protractor`).webdriver_update;
 
-const build = require(`./build`);
 const clean = require(`./clean`);
+const make = require(`./make`);
 
 const paths = require(`../config/paths`);
 const compile = require(`../lib/compile`);
@@ -51,7 +51,7 @@ function testManual(done) {
             clean.dist,
             clean.testManual
         ),
-        build.ts,
+        make.ts,
         gulp.parallel(
             copyDist,
             copyModules
