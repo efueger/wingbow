@@ -1,4 +1,4 @@
-import { hasOwn } from 'src/wingbow/utils/hasOwn';
+import { hasOwn } from 'src/wingbow/utils/has-own';
 
 let TestConstructor = null;
 let classObj = null;

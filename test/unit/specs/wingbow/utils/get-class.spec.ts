@@ -1,4 +1,4 @@
-import { getClass } from 'src/wingbow/utils/getClass';
+import { getClass } from 'src/wingbow/utils/get-class';
 
 describe(`getClass`, () => {
 

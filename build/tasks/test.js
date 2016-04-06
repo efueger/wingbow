@@ -10,7 +10,7 @@ const make = require(`./make`);
 
 const paths = require(`../config/paths`);
 const compile = require(`../lib/compile`);
-const isCI = require(`../lib/isCI`);
+const isCI = require(`../lib/is-ci`);
 const plumb = require(`../lib/plumb`);
 
 exports.all = testAll;
@@ -24,7 +24,7 @@ testAll.displayName = `test`;
 gulp.task(testAll);
 function testAll(done) {
     gulp.series(
-        testE2E,
+        // testE2E,
         testUnit
     )(done);
 }
@@ -53,8 +53,8 @@ function testManual(done) {
         ),
         make.ts,
         gulp.parallel(
-            copyDist,
-            copyModules
+            copyTestManualDist,
+            copyTestManualModules
         )
     )(done);
 }
@@ -86,7 +86,7 @@ function compileTestE2E(filesRoot) {
         };
         return compile(filesRoot, filesDest, filesGlob, options);
     };
-    fn.displayName = `compile:test:e2e:${filesRoot.replace(`/`, `:`)}`;
+    fn.displayName = `test:compile:${filesRoot.replace(`/`, `:`)}`;
     return fn;
 }
 
@@ -109,25 +109,25 @@ function compileTestUnit(filesRoot) {
         };
         return compile(filesRoot, filesDest, filesGlob, options);
     };
-    fn.displayName = `compile:test:unit:${filesRoot.replace(`/`, `:`)}`;
+    fn.displayName = `test:compile:${filesRoot.replace(`/`, `:`)}`;
     return fn;
 }
 
-copyDist.displayName = `copy:dist`;
-function copyDist() {
+copyTestManualDist.displayName = `test:copy:test:manual:dist`;
+function copyTestManualDist() {
     return gulp.src(paths.copy.dist)
         .pipe($.plumber(plumb))
         .pipe(gulp.dest(paths.dist.testManualDist));
 }
 
-copyModules.displayName = `copy:modules`;
-function copyModules() {
+copyTestManualModules.displayName = `test:copy:test:manual:modules`;
+function copyTestManualModules() {
     return gulp.src(paths.copy.modules)
         .pipe($.plumber(plumb))
         .pipe(gulp.dest(paths.dist.testManualModules));
 }
 
-karmaRemapCoverage.displayName = `karma:remap:coverage`;
+karmaRemapCoverage.displayName = `test:karma:remap:coverage`;
 function karmaRemapCoverage() {
     return gulp.src(paths.coverage.remapPre)
         .pipe($.plumber(plumb))
@@ -141,7 +141,7 @@ function karmaRemapCoverage() {
         }));
 }
 
-karmaRun.displayName = `karma:run`;
+karmaRun.displayName = `test:karma:run`;
 function karmaRun(done) {
     new KarmaServer({
         configFile: path.join(__dirname, `..`, `..`, `karma.conf.js`),
@@ -151,7 +151,7 @@ function karmaRun(done) {
     }).start();
 }
 
-protractorRun.displayName = `protractor:run`;
+protractorRun.displayName = `test:protractor:run`;
 function protractorRun() {
     return gulp.src(`${paths.tmp.protractor}/test/e2e/specs/**/*.spec.js`)
         .pipe($.plumber(plumb))
@@ -163,7 +163,7 @@ function protractorRun() {
         });
 }
 
-webdriverUpdate.displayName = `webdriver:update`;
+webdriverUpdate.displayName = `test:webdriver:update`;
 function webdriverUpdate(done) {
     webdriver({}, done);
 }

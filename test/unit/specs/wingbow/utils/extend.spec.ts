@@ -1,5 +1,5 @@
 import { Extend } from 'src/wingbow/utils/extend';
-import { hasOwn } from 'src/wingbow/utils/hasOwn';
+import { hasOwn } from 'src/wingbow/utils/has-own';
 import { isFunction } from 'src/wingbow/utils/is';
 
 let ParentConstructor = null;

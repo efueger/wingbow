@@ -17,7 +17,7 @@
     "url": "https://github.com/wingbow/wingbow/issues"
   },
   "scripts": {
-    "test": "gulp test",
+    "test": "gulp ci",
     "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls",
     "typings": "typings"
   },
@@ -54,6 +54,7 @@
     "karma-coverage": "^0.5.3",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^1.0.0",
+    "merge2": "^1.0.2",
     "phantomjs-prebuilt": "^2.1.7",
     "remap-istanbul": "0.4.0",
     "require-dir": "^0.3.0",

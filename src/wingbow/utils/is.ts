@@ -1,4 +1,4 @@
-import { getClass } from './getClass';
+import { getClass } from './get-class';
 
 export function isArray<T>(item :any) :item is Array<T> {
     return getClass(item) === `array`;

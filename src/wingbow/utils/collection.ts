@@ -2,7 +2,7 @@ import { Jsonable } from './types';
 import { isFunction } from './is';
 import { toNumberOrNaN } from './to';
 import { IllegalOperatorError } from './errors';
-import { BaseCollection, BaseCollectionInstance } from './baseCollection';
+import { BaseCollection, BaseCollectionInstance } from './base-collection';
 
 export interface CollectionInstance<T> extends BaseCollectionInstance<T> {
     readonly length :number;

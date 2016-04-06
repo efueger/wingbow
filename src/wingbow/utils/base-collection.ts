@@ -1,4 +1,4 @@
-import { hasOwn } from './hasOwn';
+import { hasOwn } from './has-own';
 
 export const MAX_ARRAY_LENGTH = Math.pow(2, 32) - 1;
 export function ToUint32(value :any) :number {

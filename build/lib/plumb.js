@@ -1,4 +1,4 @@
-const isCI = require(`./isCI`);
+const isCI = require(`./is-ci`);
 
 module.exports = {
     errorHandler: !isCI,

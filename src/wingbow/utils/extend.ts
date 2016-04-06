@@ -1,4 +1,4 @@
-import { hasOwn } from './hasOwn';
+import { hasOwn } from './has-own';
 
 function mapValueForDescriptor(values) {
     return Object.keys(values).reduce((previous, current) => {

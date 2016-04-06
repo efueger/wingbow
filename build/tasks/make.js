@@ -23,14 +23,14 @@ gulp.task(makeTs);
 function makeTs(done) {
     gulp.series(
         clean.dist,
-        compileMakeTs(paths.compile.src)
+        compileMakeSrc(paths.compile.src)
     )(done);
 }
 
 ////////////////////
 
-function compileMakeTs(filesRoot) {
-    const fn = function compileMakeTsTask() {
+function compileMakeSrc(filesRoot) {
+    const fn = function compileMakeSrcTask() {
         const filesDest = paths.dist.make;
         const filesGlob = [`${filesRoot}/${paths.make.entry}`];
         const options = {
@@ -38,6 +38,6 @@ function compileMakeTs(filesRoot) {
         };
         return compile(filesRoot, filesDest, filesGlob, options);
     };
-    fn.displayName = `compile:make:ts:${filesRoot.replace(`/`, `:`)}`;
+    fn.displayName = `make:compile:${filesRoot.replace(`/`, `:`)}`;
     return fn;
 }

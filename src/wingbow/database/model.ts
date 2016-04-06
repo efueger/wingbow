@@ -1,6 +1,6 @@
 import { Trait } from '../utils/trait';
 import { Extend } from '../utils/extend';
-import { hasOwn } from '../utils/hasOwn';
+import { hasOwn } from '../utils/has-own';
 import { isFunction, isString } from '../utils/is';
 import { Jsonable, JsonableObject } from '../utils/types';
 import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../utils/str';

@@ -1,7 +1,7 @@
 import { isString } from 'src/wingbow/utils/is';
 import { Collection } from 'src/wingbow/utils/collection';
 import { IllegalOperatorError } from 'src/wingbow/utils/errors';
-import { BaseCollection, MAX_ARRAY_LENGTH } from 'src/wingbow/utils/baseCollection';
+import { BaseCollection, MAX_ARRAY_LENGTH } from 'src/wingbow/utils/base-collection';
 
 let col = null;
 

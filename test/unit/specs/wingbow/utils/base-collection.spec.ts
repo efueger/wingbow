@@ -1,6 +1,6 @@
 import { isString } from 'src/wingbow/utils/is';
 import { IllegalOperatorError } from 'src/wingbow/utils/errors';
-import { BaseCollection } from 'src/wingbow/utils/baseCollection';
+import { BaseCollection } from 'src/wingbow/utils/base-collection';
 
 let col = null;
 

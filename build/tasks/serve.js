@@ -77,6 +77,6 @@ function livereload(root) {
             middleware: () => [history()],
         });
     };
-    fn.displayName = `livereload:${root.replace(`/`, `:`)}`;
+    fn.displayName = `serve:livereload:${root.replace(`/`, `:`)}`;
     return fn;
 }
