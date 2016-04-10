@@ -1,13 +1,15 @@
+import { Moment } from 'moment';
+import * as moment from 'moment';
 import { Trait } from '../utils/trait';
 import { Extend } from '../utils/extend';
 import { hasOwn } from '../utils/has-own';
-import { isFunction, isString } from '../utils/is';
 import { Jsonable, JsonableObject } from '../utils/types';
 import { intersectWithObj, intersectWithoutObj } from '../utils/intersect-obj';
+import { isDate, isFunction, isNumber, isString } from '../utils/is';
 import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../utils/str';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError  } from './errors';
 import { getRawAttribute, getRawAttributes, setRawAttribute, setRawOriginals } from './store';
-import { toArray, toBoolean, toDate, toJSON, toNumber, toObject, toString, toTimestamp } from '../utils/to';
+import { toArray, toBoolean, toJSON, toNumber, toObject, toString, toTimestamp } from '../utils/to';
 
 @Trait([
     Extend
@@ -17,6 +19,21 @@ export abstract class Model {
     constructor(attributes :JsonableObject = {}) {
         this.syncOriginal();
         this.fill(attributes);
+    }
+
+    protected asDate(value :any) :Moment {
+        if (value instanceof moment) {
+            return value;
+        }
+        if (isDate(value) || isNumber(value)) {
+            return moment(value);
+        }
+        return moment(value, this.getDateFormat());
+    }
+
+    protected asTimestamp(value :any) :number {
+        const date = this.asDate(value);
+        return toTimestamp(date);
     }
 
     public attributesToObject() :JsonableObject {
@@ -42,6 +59,8 @@ export abstract class Model {
                 return toArray(value);
             case `boolean`:
                 return toBoolean(value);
+            case `date`:
+                return this.asDate(value);
             case `json`:
                 return toJSON(value);
             case `number`:
@@ -51,7 +70,7 @@ export abstract class Model {
             case `string`:
                 return toString(value);
             case `timestamp`:
-                return toTimestamp(value);
+                return this.asTimestamp(value);
         }
         throw new IllegalCastTypeError(`Could not cast "${key}" to "${caster}"`);
     }
@@ -66,6 +85,10 @@ export abstract class Model {
 
     protected createdAt() :string {
         return `created_at`;
+    }
+
+    protected dateFormat() :string {
+        return ``;
     }
 
     protected dates() :Array<string> {
@@ -89,6 +112,11 @@ export abstract class Model {
         return [];
     }
 
+    public fromDate(value :any) :string {
+        const date = this.asDate(value);
+        return this.serializeDate(date);
+    }
+
     public getAttribute(key :string) :Jsonable|void {
         if (this.hasAttribute(key) || this.hasGetMutator(key)) {
             return this.getAttributeValue(key);
@@ -105,7 +133,7 @@ export abstract class Model {
         return attributes;
     }
 
-    public getAttributeValue(key :string) :Jsonable {
+    public getAttributeValue(key :string) :any {
         const value = getRawAttribute(this, key);
         if (this.hasGetMutator(key)) {
             return this.callGetMutator(key, value);
@@ -114,7 +142,7 @@ export abstract class Model {
             return this.castAttribute(key, value);
         }
         if (this.getDates().includes(key)) {
-            return toDate(value);
+            return this.asDate(value);
         }
         return value;
     }
@@ -157,6 +185,11 @@ export abstract class Model {
             this.createdAt(),
             this.updatedAt(),
         ];
+    }
+
+    protected getDateFormat() :string {
+        const format = this.dateFormat();
+        return format || `YYYY-MM-DDTHH:mm:ss.SSSZ`;
     }
 
     protected getJsonableAttributes() :JsonableObject {
@@ -261,11 +294,16 @@ export abstract class Model {
         return `id`;
     }
 
+    protected serializeDate(date :Moment) :string {
+        const formatter = this.getDateFormat();
+        return date.format(formatter);
+    }
+
     public setAttribute(key :string, value :Jsonable) :void {
         if (this.hasSetMutator(key)) {
             value = this.callSetMutator(key, value);
         } else if (this.getDates().includes(key) || this.isDateCastable(key)) {
-            value = toTimestamp(value);
+            value = this.fromDate(value);
         }
         setRawAttribute(this, key, value);
     }

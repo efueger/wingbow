@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "es6-shim": "^0.35.0",
-    "es7-shim": "^5.0.0"
+    "es7-shim": "^5.0.0",
+    "moment": "^2.12.0"
   },
   "devDependencies": {
     "@whitneyit/log": "^1.1.1",

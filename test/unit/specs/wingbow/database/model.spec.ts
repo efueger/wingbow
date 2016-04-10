@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { Model } from 'src/wingbow/database/model';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from 'src/wingbow/database/errors';
 
@@ -33,6 +34,30 @@ describe(`Model`, () => {
 
     });
 
+    describe(`asDate`, () => {
+
+        it(`should return a moment instance if one was passed in`, () => {
+            const m = moment();
+            expect(model.asDate(m)).toBe(m);
+        });
+
+        it(`should return a moment instance if a Number was passed in`, () => {
+            expect(model.asDate(946684800000).valueOf).toEqual(moment(946684800000).valueOf);
+        });
+
+        it(`should return a moment instance if a Date was passed in`, () => {
+            expect(model.asDate(new Date(946684800000)).valueOf).toEqual(moment(946684800000).valueOf);
+        });
+
+        it(`should return a moment instance if a anything else was passed in`, () => {
+            expect(model.asDate(`2000-01-01T00:00:00.000Z`).valueOf).toEqual(moment(946684800000).valueOf);
+        });
+
+    });
+
+    describe(`asTimestamp`, () => {
+    });
+
     describe(`attributesToObject`, () => {
     });
 
@@ -56,7 +81,7 @@ describe(`Model`, () => {
                 fillable() { return [`birthday`]; }
                 setBirthdayAttribute(value) { return Number(value); }
             }
-            model = new MockModel({birthday: new Date(`1 Jan 2000 UTC`)});
+            model = new MockModel({birthday: new Date(`2000-01-01T00:00:00.000Z`)});
             expect(model.getAttribute(`birthday`)).toBe(946684800000);
         });
 
@@ -66,11 +91,16 @@ describe(`Model`, () => {
 
         it(`should cast the attributes to their various types`, () => {
             class MockModel extends Model {
-                casts() { return {a1: Array, a2: `array`, b1: Boolean, b2: `boolean`, j1: JSON, j2: `json`, j3: `json`, n1: Number, n2: `number`, o1: Object, o2: `object`, s1: String, s2: `string`, t: `timestamp`}; }
-                fillable() { return [`a1`, `a2`, `b1`, `b2`, `j1`, `j2`, `j3`, `n1`, `n2`, `o1`, `o2`, `s1`, `s2`, `t`]; }
+                casts() { return {a1: Array, a2: `array`, b1: Boolean, b2: `boolean`, d1: `date`, d2: Date, j1: JSON, j2: `json`, j3: `json`, n1: Number, n2: `number`, o1: Object, o2: `object`, s1: String, s2: `string`, t: `timestamp`}; }
+                fillable() { return [`a1`, `a2`, `b1`, `b2`, `d1`, `d2`, `j1`, `j2`, `j3`, `n1`, `n2`, `o1`, `o2`, `s1`, `s2`, `t`]; }
             }
-            model = new MockModel({a1: {0: `a1`, length: 1}, a2: null, b1: 0, b2: 1, j1: {j1: 1}, j2: null, j3: undefined, n1: `Infinity`, n2: `123`, o1: `{"o1": 1}`, o2: function () {}, s1: Infinity, s2: 123, t: new Date(`1 Jan 2000 UTC`)});
-            expect(model.getAttributes()).toEqual({a1: [`a1`], a2: [], b1: false, b2: true, j1: JSON.stringify({j1: 1}), j2: `null`, j3: `null`, n1: Infinity, n2: 123, o1: {o1: 1}, o2: {}, s1: `Infinity`, s2: `123`, t: 946684800000});
+            const input = {a1: {0: `a1`, length: 1}, a2: null, b1: 0, b2: 1, d1: 946684800000, d2: `2000-01-01T00:00:00.000Z`, j1: {j1: 1}, j2: null, j3: undefined, n1: `Infinity`, n2: `123`, o1: `{"o1": 1}`, o2: function () {}, s1: Infinity, s2: 123, t: new Date(`2000-01-01T00:00:00.000Z`)};
+            const output = {a1: [`a1`], a2: [], b1: false, b2: true, d1: moment(946684800000).valueOf(), d2: moment(`2000-01-01T00:00:00.000Z`).valueOf(), j1: JSON.stringify({j1: 1}), j2: `null`, j3: `null`, n1: Infinity, n2: 123, o1: {o1: 1}, o2: {}, s1: `Infinity`, s2: `123`, t: 946684800000};
+            model = new MockModel(input);
+            const attributes = model.getAttributes();
+            attributes.d1 = attributes.d1.valueOf();
+            attributes.d2 = attributes.d2.valueOf();
+            expect(attributes).toEqual(output);
         });
 
         it(`should throw when getting the attributes if the cast type is invalid`, () => {
@@ -98,6 +128,9 @@ describe(`Model`, () => {
             expect(model.createdAt()).toBe(`created_at`);
         });
 
+    });
+
+    describe(`dateFormat`, () => {
     });
 
     describe(`dates`, () => {
@@ -130,6 +163,9 @@ describe(`Model`, () => {
             expect(model.getAttributes()).toEqual({a: 1});
         });
 
+    });
+
+    describe(`fromDate`, () => {
     });
 
     describe(`getAttribute`, () => {
@@ -208,7 +244,7 @@ describe(`Model`, () => {
             }
             model = new MockModel({birthday: 946684800000});
             spyOn(model, `getDates`).and.callThrough();
-            expect(model.getAttributeValue(`birthday`)).toEqual(new Date(`1 Jan 2000 UTC`));
+            expect(model.getAttributeValue(`birthday`).valueOf()).toEqual(new Date(`2000-01-01T00:00:00.000Z`).valueOf());
             expect(model.getDates).toHaveBeenCalled();
         });
 
@@ -292,6 +328,9 @@ describe(`Model`, () => {
             expect(model.getDates()).toEqual([`birthday`]);
         });
 
+    });
+
+    describe(`getDateFormat`, () => {
     });
 
     describe(`getJsonableAttributes`, () => {
@@ -383,6 +422,9 @@ describe(`Model`, () => {
     });
 
     describe(`primaryKey`, () => {
+    });
+
+    describe(`serializeDate`, () => {
     });
 
     describe(`setAttribute`, () => {

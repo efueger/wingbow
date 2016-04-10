@@ -28,11 +28,11 @@ export function toJSON(value :any = null) :string {
     return JSON.stringify(value);
 }
 
-export function toNumber(value :any = null) :Number {
+export function toNumber(value :any = null) :number {
     return Number(value);
 }
 
-export function toNumberOrNaN(value :any = null) :Number {
+export function toNumberOrNaN(value :any = null) :number {
     if (isNumber(value)) {
         return value;
     }
@@ -56,7 +56,7 @@ export function toString(value :any = '') :string {
     return String(value);
 }
 
-export function toTimestamp(value :any = null) :Number {
+export function toTimestamp(value :any = null) :number {
     const date = toDate(value);
-    return Number(date);
+    return date.valueOf();
 }

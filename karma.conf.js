@@ -48,6 +48,7 @@ module.exports = function karmaConf(karma) {
             // files loaded by Karma
             {pattern: `node_modules/es6-shim/es6-shim.js`, included: true},
             {pattern: `node_modules/es7-shim/dist/es7-shim.js`, included: true},
+            {pattern: `node_modules/moment/moment.js`, included: true},
             {pattern: `node_modules/systemjs/dist/system-polyfills.src.js`, included: true},
             {pattern: `node_modules/systemjs/dist/system.src.js`, included: true},
             {pattern: `${paths.tmp.karma}/test/unit/setup.js`, included: true},

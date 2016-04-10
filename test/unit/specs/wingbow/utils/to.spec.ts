@@ -36,7 +36,7 @@ describe(`is`, () => {
     describe(`toDate`, () => {
 
         it(`should convert values to a "Date"`, () => {
-            expect(toDate(`1 Jan 2000 UTC`)).toEqual(new Date(`1 Jan 2000 UTC`));
+            expect(toDate(`2000-01-01T00:00:00.000Z`)).toEqual(new Date(`2000-01-01T00:00:00.000Z`));
             expect(toDate()).toEqual(new Date(null));
         });
 
@@ -110,8 +110,8 @@ describe(`is`, () => {
         it(`should convert values to a "Timestamp"`, () => {
             expect(toTimestamp()).toEqual(0);
             expect(toTimestamp(946684800000)).toEqual(946684800000);
-            expect(toTimestamp(`1 Jan 2000 UTC`)).toEqual(946684800000);
-            expect(toTimestamp(new Date(`1 Jan 2000 UTC`))).toEqual(946684800000);
+            expect(toTimestamp(`2000-01-01T00:00:00.000Z`)).toEqual(946684800000);
+            expect(toTimestamp(new Date(`2000-01-01T00:00:00.000Z`))).toEqual(946684800000);
         });
 
     });

@@ -17,6 +17,9 @@ const paths = {
 };
 
 System.config({
+    paths: {
+        moment: `/base/node_modules/moment/moment.js`,
+    },
     map: {
         src: `/base/${paths.tmp.karma}/src`,
     },
