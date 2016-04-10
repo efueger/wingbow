@@ -1,10 +1,12 @@
 import {
     toArray,
+    toBoolean,
     toDate,
     toJSON,
     toNumber,
     toNumberOrNaN,
     toObject,
+    toString,
     toTimestamp,
 } from 'src/wingbow/utils/to';
 
@@ -16,6 +18,17 @@ describe(`is`, () => {
             expect(toArray({0: `a`, 1: `b`, 2: `c`, length: 3})).toEqual([`a`, `b`, `c`]);
             expect(toArray(null)).toEqual([]);
             expect(toArray(undefined)).toEqual([]);
+        });
+
+    });
+
+    describe(`toBoolean`, () => {
+
+        it(`should convert values to an "Boolean"`, () => {
+            expect(toBoolean(0)).toEqual(false);
+            expect(toBoolean(1)).toEqual(true);
+            expect(toBoolean(null)).toEqual(false);
+            expect(toBoolean(undefined)).toEqual(false);
         });
 
     });
@@ -78,6 +91,16 @@ describe(`is`, () => {
             expect(toObject(undefined)).toEqual({});
             expect(toObject(function () {})).toEqual({});
             expect(toObject(/a/)).toEqual({});
+        });
+
+    });
+
+    describe(`toString`, () => {
+
+        it(`should convert values to a "String"`, () => {
+            expect(toString()).toBe('');
+            expect(toString('foo')).toBe('foo');
+            expect(toString(123)).toBe('123');
         });
 
     });

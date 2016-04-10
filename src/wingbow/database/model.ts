@@ -3,28 +3,34 @@ import { Extend } from '../utils/extend';
 import { hasOwn } from '../utils/has-own';
 import { isFunction, isString } from '../utils/is';
 import { Jsonable, JsonableObject } from '../utils/types';
+import { intersectWithObj, intersectWithoutObj } from '../utils/intersect-obj';
 import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../utils/str';
-import { toArray, toDate, toJSON, toNumber, toObject, toTimestamp } from '../utils/to';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError  } from './errors';
 import { getRawAttribute, getRawAttributes, setRawAttribute, setRawOriginals } from './store';
+import { toArray, toBoolean, toDate, toJSON, toNumber, toObject, toString, toTimestamp } from '../utils/to';
 
 @Trait([
     Extend
 ])
 export abstract class Model {
 
-    constructor(attributes :Object = {}) {
+    constructor(attributes :JsonableObject = {}) {
         this.syncOriginal();
         this.fill(attributes);
     }
 
+    public attributesToObject() :JsonableObject {
+        const attributes = this.getJsonableAttributes();
+        return attributes;
+    }
+
     protected callGetMutator(key :string, value :Jsonable) :Jsonable {
-        const mutator = this.mutatorName(`get`, key);
+        const mutator = this.getMutatorName(`get`, key);
         return this[mutator](value);
     }
 
     protected callSetMutator(key :string, value :Jsonable) :Jsonable {
-        const mutator = this.mutatorName(`set`, key);
+        const mutator = this.getMutatorName(`set`, key);
         return this[mutator](value);
     }
 
@@ -35,7 +41,7 @@ export abstract class Model {
             case `array`:
                 return toArray(value);
             case `boolean`:
-                return Boolean(value);
+                return toBoolean(value);
             case `json`:
                 return toJSON(value);
             case `number`:
@@ -43,7 +49,7 @@ export abstract class Model {
             case `object`:
                 return toObject(value);
             case `string`:
-                return String(value);
+                return toString(value);
             case `timestamp`:
                 return toTimestamp(value);
         }
@@ -66,7 +72,7 @@ export abstract class Model {
         return [];
     }
 
-    public fill(attributes :Object) :void {
+    public fill(attributes :JsonableObject) :void {
         if (this.isWriteProtected()) {
             throw new MassAssignmentError();
         }
@@ -153,6 +159,28 @@ export abstract class Model {
         ];
     }
 
+    protected getJsonableAttributes() :JsonableObject {
+        const attributes = getRawAttributes(this);
+        const jsonable = this.getJsonableItems(attributes);
+        return jsonable;
+    }
+
+    protected getJsonableItems(items :JsonableObject) :JsonableObject {
+        const visible = this.visible();
+        if (visible.length > 0) {
+            return intersectWithObj<JsonableObject>(items, visible);
+        }
+        const hidden = this.hidden();
+        if (hidden.length > 0) {
+            return intersectWithoutObj<JsonableObject>(items, hidden);
+        }
+        return items;
+    }
+
+    protected getMutatorName(accessor :string, key :string) :string {
+        return `${accessor}${toPascalCase(key)}Attribute`;
+    }
+
     public getRelationValue(key :string) :void {
         // TODO
     }
@@ -176,18 +204,18 @@ export abstract class Model {
     }
 
     public hasGetMutator(key :string) :boolean {
-        const mutator = this.mutatorName(`get`, key);
+        const mutator = this.getMutatorName(`get`, key);
         return isFunction(this[mutator]);
     }
 
     public hasSetMutator(key :string) :boolean {
-        const mutator = this.mutatorName(`set`, key);
+        const mutator = this.getMutatorName(`set`, key);
         return isFunction(this[mutator]);
     }
 
-    // protected hidden() :Array<string> {
-    //     return [`password`];
-    // }
+    protected hidden() :Array<string> {
+        return [];
+    }
 
     protected incrementing() :boolean {
         return true;
@@ -225,10 +253,6 @@ export abstract class Model {
         return this.fillable().length === 0 && this.isFullyGuarded();
     }
 
-    protected mutatorName(accessor :string, key :string) :string {
-        return `${accessor}${toPascalCase(key)}Attribute`;
-    }
-
     // protected perPage() :number {
     //     return 20;
     // }
@@ -261,12 +285,21 @@ export abstract class Model {
     }
 
     public toJSON() :string {
-        const attributes = getRawAttributes(this);
-        return JSON.stringify(attributes);
+        const obj = this.toObject();
+        return JSON.stringify(obj);
+    }
+
+    public toObject() :JsonableObject {
+        const attributes = this.attributesToObject();
+        return Object.assign({}, attributes);
     }
 
     protected updatedAt() :string {
         return `updated_at`;
+    }
+
+    protected visible() :Array<string> {
+        return [];
     }
 
 }

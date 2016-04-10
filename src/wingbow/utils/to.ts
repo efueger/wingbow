@@ -16,6 +16,10 @@ export function toArray(value :any = null) :Array<any> {
     return Array.from(value);
 }
 
+export function toBoolean(value :any = false) :boolean {
+    return Boolean(value);
+}
+
 export function toDate(value :any = null) :Date {
     return new Date(value);
 }
@@ -46,6 +50,10 @@ export function toObject(value :any = null) :Object {
         return {};
     }
     return value;
+}
+
+export function toString(value :any = '') :string {
+    return String(value);
 }
 
 export function toTimestamp(value :any = null) :Number {

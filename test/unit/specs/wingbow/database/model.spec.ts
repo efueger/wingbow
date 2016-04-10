@@ -33,6 +33,9 @@ describe(`Model`, () => {
 
     });
 
+    describe(`attributesToObject`, () => {
+    });
+
     describe(`callGetMutator`, () => {
 
         it(`should mutate attribute getters`, () => {
@@ -83,6 +86,9 @@ describe(`Model`, () => {
 
     });
 
+    describe(`casts`, () => {
+    });
+
     describe(`connection`, () => { // TODO
     });
 
@@ -92,6 +98,9 @@ describe(`Model`, () => {
             expect(model.createdAt()).toBe(`created_at`);
         });
 
+    });
+
+    describe(`dates`, () => {
     });
 
     describe(`fill`, () => {
@@ -215,7 +224,6 @@ describe(`Model`, () => {
 
     });
 
-    // describe(`casts`, () => {
     describe(`getCasts`, () => {
 
         it(`should throw if the cast type is "null" or "undefined"`, () => {
@@ -259,7 +267,9 @@ describe(`Model`, () => {
 
     });
 
-    // describe(`dates`, () => {
+    describe(`getCastType`, () => {
+    });
+
     describe(`getDates`, () => {
 
         it(`should include "createdAt()" and "updatedAt" if the model has "timestamps()"`, () => {
@@ -282,6 +292,15 @@ describe(`Model`, () => {
             expect(model.getDates()).toEqual([`birthday`]);
         });
 
+    });
+
+    describe(`getJsonableAttributes`, () => {
+    });
+
+    describe(`getJsonableItems`, () => {
+    });
+
+    describe(`getMutatorName`, () => {
     });
 
     describe(`getRelationValue`, () => {
@@ -307,7 +326,7 @@ describe(`Model`, () => {
     describe(`hasSetMutator`, () => {
     });
 
-    describe(`hidden`, () => { // TODO
+    describe(`hidden`, () => {
     });
 
     describe(`incrementing`, () => {
@@ -360,9 +379,6 @@ describe(`Model`, () => {
     describe(`isWriteProtected`, () => {
     });
 
-    describe(`mutatorName`, () => {
-    });
-
     describe(`perPage`, () => { // TODO
     });
 
@@ -384,9 +400,34 @@ describe(`Model`, () => {
     describe(`toJSON`, () => {
 
         it(`should convert the models attributes to a JSON string`, () => {
-            expect(model.toJSON()).toBe(JSON.stringify(model.getAttributes()));
+            class MockModel extends Model {
+                fillable() { return [`a`, `b`, `c`]; }
+            }
+            model = new MockModel(attributes);
+            expect(model.toJSON()).toBe(JSON.stringify({a: 1, b: 2, c: 3}));
         });
 
+        it(`should not show hidden attributes`, () => {
+            class MockModel extends Model {
+                fillable() { return [`a`, `b`, `c`]; }
+                hidden() { return [`b`]; }
+            }
+            model = new MockModel(attributes);
+            expect(model.toJSON()).toBe(JSON.stringify({a: 1, c: 3}));
+        });
+
+        it(`should show visible attributes`, () => {
+            class MockModel extends Model {
+                fillable() { return [`a`, `b`, `c`]; }
+                visible() { return [`c`]; }
+            }
+            model = new MockModel(attributes);
+            expect(model.toJSON()).toBe(JSON.stringify({c: 3}));
+        });
+
+    });
+
+    describe(`toObject`, () => {
     });
 
     describe(`updatedAt`, () => {
@@ -395,6 +436,9 @@ describe(`Model`, () => {
             expect(model.updatedAt()).toBe(`updated_at`);
         });
 
+    });
+
+    describe(`visible`, () => { // TODO
     });
 
 });
