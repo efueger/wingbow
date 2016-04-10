@@ -21,15 +21,16 @@
     "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls",
     "typings": "typings"
   },
-  "dependencies": {},
+  "dependencies": {
+    "es6-shim": "^0.35.0",
+    "es7-shim": "^5.0.0"
+  },
   "devDependencies": {
     "@whitneyit/log": "^1.1.1",
     "babel-eslint": "^6.0.2",
     "connect-history-api-fallback": "^1.1.0",
     "coveralls": "^2.11.8",
     "del": "^2.1.0",
-    "es6-shim": "^0.35.0",
-    "es7-shim": "^5.0.0",
     "eslint": "^2.6.0",
     "eslint-config-airbnb": "^6.2.0",
     "eslint-friendly-formatter": "^1.2.2",

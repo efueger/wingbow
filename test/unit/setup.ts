@@ -17,13 +17,12 @@ const paths = {
 };
 
 System.config({
-    defaultExtensions: true,
     map: {
         src: `/base/${paths.tmp.karma}/src`,
     },
     packages: {
         [`/base/${paths.tmp.karma}/src`]: {
-            format: `register`,
+            defaultExtensions: true,
         },
     },
 });
