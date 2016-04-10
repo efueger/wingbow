@@ -28,11 +28,11 @@ System.config({
 });
 
 Promise.resolve()
-.then(() =>
-    Promise.all(Object.keys(window.__karma__.files)
+.then(() => {
+    return Promise.all(Object.keys(window.__karma__.files)
     .filter(path => /.spec\.js$/.test(path))
-    .map(path => System.import(path)))
-)
+    .map(path => System.import(path)));
+})
 .then(() => {
     __karma__.start();
 })

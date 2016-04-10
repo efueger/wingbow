@@ -1,6 +1,7 @@
 {
     "extends": "airbnb/base",
     "rules": {
+        "arrow-body-style": ["off"],
         "comma-dangle": ["error", "always-multiline"],
         "indent": ["error", 4, {"SwitchCase": 1}],
         "max-len": ["error", 80],
