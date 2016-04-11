@@ -1,26 +1,33 @@
 import * as moment from 'moment';
 import { Model } from 'src/wingbow/database/model';
+import { Jsonable, JsonableObject } from 'src/wingbow/utils/types';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from 'src/wingbow/database/errors';
 
-let MockModel = null;
-let model = null;
-let attributes = null;
-let AttributeExample = null;
-let CastExample = null;
+class MockModel extends Model {
+    public callGetMutator(key :string, value :Jsonable) :Jsonable {
+        return super.callGetMutator(key, value);
+    }
+    public castAttribute(key :string, value :Jsonable) :Jsonable {
+        return super.castAttribute(key, value);
+    }
+    public fillable() {
+        return [`a`, `b`, `c`];
+    }
+    public getAttributeValue(key :string) :any {
+        return super.getAttributeValue(key);
+    }
+    public getRelationValue(key :string) :void {
+        super.getRelationValue(key);
+    }
+}
+let attributes = {a: 1, b: 2, c: 3};
+let model = new MockModel(attributes);
 
 describe(`Model`, () => {
 
     beforeEach(() => {
-        class LocalMockModel extends Model {
-            fillable() { return [`a`, `b`, `c`]; }
-        }
-        MockModel = LocalMockModel;
         attributes = {a: 1, b: 2, c: 3};
         model = new MockModel(attributes);
-        AttributeExample = function() { this.localProp = false; };
-        AttributeExample.prototype.protoProp = true;
-        CastExample = function() { this.localProp = `string`; };
-        CastExample.prototype.protoProp = `string`;
     });
 
     describe(`constructor`, () => {
@@ -28,7 +35,7 @@ describe(`Model`, () => {
         it(`should protect the user from mass assignment`, () => {
             class MockModel extends Model {}
             expect(() => {
-                model = new MockModel();
+                const model = new MockModel();
             }).toThrowError(MassAssignmentError);
         });
 
@@ -65,10 +72,10 @@ describe(`Model`, () => {
 
         it(`should mutate attribute getters`, () => {
             class MockModel extends Model {
-                fillable() { return [`name`]; }
-                getNameAttribute(value) { return value.toUpperCase(); }
+                public fillable() { return [`name`]; }
+                public getNameAttribute(value) { return value.toUpperCase(); }
             }
-            model = new MockModel({name: `John Doe`});
+            const model = new MockModel({name: `John Doe`});
             expect(model.getAttribute(`name`)).toBe(`JOHN DOE`);
         });
 
@@ -78,10 +85,10 @@ describe(`Model`, () => {
 
         it(`should mutate attribute getters`, () => {
             class MockModel extends Model {
-                fillable() { return [`birthday`]; }
-                setBirthdayAttribute(value) { return Number(value); }
+                public fillable() { return [`birthday`]; }
+                public setBirthdayAttribute(value) { return Number(value); }
             }
-            model = new MockModel({birthday: new Date(`2000-01-01T00:00:00.000Z`)});
+            const model = new MockModel({birthday: new Date(`2000-01-01T00:00:00.000Z`)});
             expect(model.getAttribute(`birthday`)).toBe(946684800000);
         });
 
@@ -91,24 +98,26 @@ describe(`Model`, () => {
 
         it(`should cast the attributes to their various types`, () => {
             class MockModel extends Model {
-                casts() { return {a1: Array, a2: `array`, b1: Boolean, b2: `boolean`, d1: `date`, d2: Date, j1: JSON, j2: `json`, j3: `json`, n1: Number, n2: `number`, o1: Object, o2: `object`, s1: String, s2: `string`, t: `timestamp`}; }
-                fillable() { return [`a1`, `a2`, `b1`, `b2`, `d1`, `d2`, `j1`, `j2`, `j3`, `n1`, `n2`, `o1`, `o2`, `s1`, `s2`, `t`]; }
+                public casts() { return {a1: Array, a2: `array`, b1: Boolean, b2: `boolean`, d1: `date`, d2: Date, j1: JSON, j2: `json`, j3: `json`, n1: Number, n2: `number`, o1: Object, o2: `object`, s1: String, s2: `string`, t: `timestamp`}; }
+                public fillable() { return [`a1`, `a2`, `b1`, `b2`, `d1`, `d2`, `j1`, `j2`, `j3`, `n1`, `n2`, `o1`, `o2`, `s1`, `s2`, `t`]; }
             }
             const input = {a1: {0: `a1`, length: 1}, a2: null, b1: 0, b2: 1, d1: 946684800000, d2: `2000-01-01T00:00:00.000Z`, j1: {j1: 1}, j2: null, j3: undefined, n1: `Infinity`, n2: `123`, o1: `{"o1": 1}`, o2: function () {}, s1: Infinity, s2: 123, t: new Date(`2000-01-01T00:00:00.000Z`)};
             const output = {a1: [`a1`], a2: [], b1: false, b2: true, d1: moment(946684800000).valueOf(), d2: moment(`2000-01-01T00:00:00.000Z`).valueOf(), j1: JSON.stringify({j1: 1}), j2: `null`, j3: `null`, n1: Infinity, n2: 123, o1: {o1: 1}, o2: {}, s1: `Infinity`, s2: `123`, t: 946684800000};
-            model = new MockModel(input);
-            const attributes = model.getAttributes();
-            attributes.d1 = attributes.d1.valueOf();
-            attributes.d2 = attributes.d2.valueOf();
-            expect(attributes).toEqual(output);
+            const model = new MockModel(input);
+            const attrs = model.getAttributes();
+            attrs.d1 = attrs.d1.valueOf();
+            attrs.d2 = attrs.d2.valueOf();
+            expect(attrs).toEqual(output);
         });
 
         it(`should throw when getting the attributes if the cast type is invalid`, () => {
+            const AttributeExample = function() { this.localProp = false; };
+            AttributeExample.prototype.protoProp = true;
             class MockModel extends Model {
-                casts() { return {a: AttributeExample}; }
-                fillable() { return [`a`, `b`, `c`]; }
+                public casts() { return {a: AttributeExample}; }
+                public fillable() { return [`a`, `b`, `c`]; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(() => {
                 model.getAttributes();
             }).toThrowError(IllegalCastTypeError);
@@ -139,11 +148,13 @@ describe(`Model`, () => {
     describe(`fill`, () => {
 
         it(`should only fill non prototypal properties`, () => {
+            const ProtoExample = function() { this.localProp = false; };
+            ProtoExample.prototype.protoProp = true;
             class MockModel extends Model {
-                fillable() { return [`localProp`]; }
+                public fillable() { return [`localProp`]; }
             }
-            attributes = new AttributeExample();
-            model = new MockModel(attributes);
+            attributes = new ProtoExample();
+            const model = new MockModel(attributes);
             expect(model.getAttributes()).toEqual({localProp: false});
         });
 
@@ -157,9 +168,9 @@ describe(`Model`, () => {
 
         it(`should not fill any non "fillable" attributes`, () => {
             class MockModel extends Model {
-                fillable() { return [`a`, `d`]; }
+                public fillable() { return [`a`, `d`]; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(model.getAttributes()).toEqual({a: 1});
         });
 
@@ -179,13 +190,24 @@ describe(`Model`, () => {
 
         it(`should call the mutator if one exists but the model does not have the given attribute`, () => {
             class MockModel extends Model {
-                fillable() { return [`a`, `b`, `c`]; }
-                getAgeAttribute(value) { return value; }
+                public callGetMutator(key :string, value :Jsonable) :Jsonable {
+                    return super.callGetMutator(key, value);
+                }
+                public fillable() { return [`age`, `name`]; }
+                public getAgeAttribute(age) {
+                    expect(age).toBe(undefined);
+                    return 21;
+                }
+                public getNameAttribute(name) {
+                    expect(name).toBe(`Joe`);
+                    return `${name} ${name}`;
+                }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel({name: `Joe`});
             spyOn(model, `callGetMutator`).and.callThrough();
             expect(model.hasAttribute(`age`)).toBe(false);
-            expect(model.getAttribute(`age`)).toBe(undefined);
+            expect(model.getAttribute(`age`)).toBe(21);
+            expect(model.getAttribute(`name`)).toBe(`Joe Joe`);
             expect(model.callGetMutator).toHaveBeenCalledWith(`age`, undefined);
         });
 
@@ -210,13 +232,19 @@ describe(`Model`, () => {
 
         it(`should return the mutated attribute should a get mutator be set`, () => {
             class MockModel extends Model {
-                fillable() { return [`marital`]; }
-                getMaritalAttribute(value) {
+                public callGetMutator(key :string, value :Jsonable) :Jsonable {
+                    return super.callGetMutator(key, value);
+                }
+                public fillable() { return [`marital`]; }
+                public getAttributeValue(key :string) :any {
+                    return super.getAttributeValue(key);
+                }
+                public getMaritalAttribute(value) {
                     expect(value).toBe(`divorced`);
                     return `single`;
                 }
             }
-            model = new MockModel({marital: `divorced`});
+            const model = new MockModel({marital: `divorced`});
             spyOn(model, `hasGetMutator`).and.callThrough();
             spyOn(model, `callGetMutator`).and.callThrough();
             expect(model.getAttributeValue(`marital`)).toBe(`single`);
@@ -226,10 +254,16 @@ describe(`Model`, () => {
 
         it(`should return the mutated attribute should a get mutator be set`, () => {
             class MockModel extends Model {
-                fillable() { return [`age`]; }
-                casts() { return {age: Number}; }
+                public castAttribute(key :string, value :Jsonable) :Jsonable {
+                    return super.castAttribute(key, value);
+                }
+                public casts() { return {age: Number}; }
+                public fillable() { return [`age`]; }
+                public getAttributeValue(key :string) :any {
+                    return super.getAttributeValue(key);
+                }
             }
-            model = new MockModel({age: `21`});
+            const model = new MockModel({age: `21`});
             spyOn(model, `hasCast`).and.callThrough();
             spyOn(model, `castAttribute`).and.callThrough();
             expect(model.getAttributeValue(`age`)).toBe(21);
@@ -239,10 +273,13 @@ describe(`Model`, () => {
 
         it(`should return the value as a Date if it exists in "dates()"`, () => {
             class MockModel extends Model {
-                fillable() { return [`birthday`]; }
-                dates() { return [`birthday`]; }
+                public dates() { return [`birthday`]; }
+                public fillable() { return [`birthday`]; }
+                public getAttributeValue(key :string) :any {
+                    return super.getAttributeValue(key);
+                }
             }
-            model = new MockModel({birthday: 946684800000});
+            const model = new MockModel({birthday: 946684800000});
             spyOn(model, `getDates`).and.callThrough();
             expect(model.getAttributeValue(`birthday`).valueOf()).toEqual(new Date(`2000-01-01T00:00:00.000Z`).valueOf());
             expect(model.getDates).toHaveBeenCalled();
@@ -264,40 +301,42 @@ describe(`Model`, () => {
 
         it(`should throw if the cast type is "null" or "undefined"`, () => {
             class MockModel extends Model {
-                fillable() { return [`aaa`, `bbb`, `ccc`]; }
-                casts() { return {aaa: null, bbb: undefined}; }
+                public casts() { return {aaa: null, bbb: undefined}; }
+                public fillable() { return [`aaa`, `bbb`, `ccc`]; }
             }
             expect(() => {
-                model = new MockModel({aaa: 1, bbb: 2, ccc: 3});
+                const model = new MockModel({aaa: 1, bbb: 2, ccc: 3});
             }).toThrowError(IllegalCastTypeError);
         });
 
         it(`should include the "primary key" if the model is "incrementing()"`, () => {
             class MockModel extends Model {
-                casts() { return {a: String, b: `string`}; }
-                fillable() { return [`a`, `b`, `c`]; }
-                incrementing() { return true; }
+                public casts() { return {a: String, b: `string`}; }
+                public fillable() { return [`a`, `b`, `c`]; }
+                public incrementing() { return true; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(model.getCasts()).toEqual({a: `string`, b: `string`, id: `number`});
         });
 
         it(`should not include the "primary key" if the model is not "incrementing()"`, () => {
             class MockModel extends Model {
-                casts() { return {a: String, b: `string`}; }
-                fillable() { return [`a`, `b`, `c`]; }
-                incrementing() { return false; }
+                public casts() { return {a: String, b: `string`}; }
+                public fillable() { return [`a`, `b`, `c`]; }
+                public incrementing() { return false; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(model.getCasts()).toEqual({a: `string`, b: `string`});
         });
 
         it(`should not include prototypal properties`, () => {
+            const CastExample = function() { this.localProp = `string`; };
+            CastExample.prototype.protoProp = `string`;
             class MockModel extends Model {
-                casts() { return new CastExample(); }
-                fillable() { return [`a`, `b`, `c`]; }
+                public casts() { return new CastExample(); }
+                public fillable() { return [`a`, `b`, `c`]; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(model.getCasts()).toEqual({localProp: `string`, id: `number`});
         });
 
@@ -310,21 +349,21 @@ describe(`Model`, () => {
 
         it(`should include "createdAt()" and "updatedAt" if the model has "timestamps()"`, () => {
             class MockModel extends Model {
-                dates() { return [`birthday`]; }
-                fillable() { return [`birthday`]; }
-                timestamps() { return true; }
+                public dates() { return [`birthday`]; }
+                public fillable() { return [`birthday`]; }
+                public timestamps() { return true; }
             }
-            model = new MockModel();
+            const model = new MockModel();
             expect(model.getDates()).toEqual([`birthday`, `created_at`, `updated_at`]);
         });
 
         it(`should not include "createdAt()" and "updatedAt" if the model does not have "timestamps()"`, () => {
             class MockModel extends Model {
-                dates() { return [`birthday`]; }
-                fillable() { return [`birthday`]; }
-                timestamps() { return false; }
+                public dates() { return [`birthday`]; }
+                public fillable() { return [`birthday`]; }
+                public timestamps() { return false; }
             }
-            model = new MockModel();
+            const model = new MockModel();
             expect(model.getDates()).toEqual([`birthday`]);
         });
 
@@ -382,19 +421,19 @@ describe(`Model`, () => {
 
         it(`should return "false" if the attribute is listed in "guarded()"`, () => {
             class MockModel extends Model {
-                fillable() { return [`a`, `b`, `c`]; }
-                guarded() { return [`d`]; }
+                public fillable() { return [`a`, `b`, `c`]; }
+                public guarded() { return [`d`]; }
             }
-            model = new MockModel();
+            const model = new MockModel();
             expect(model.isFillable(`d`)).toBe(false);
         });
 
         it(`should throw if an attribute is not listed in "fillable()" or "guarded()"`, () => {
             class MockModel extends Model {
-                fillable() { return [`a`, `b`, `c`]; }
-                guarded() { return [`d`]; }
+                public fillable() { return [`a`, `b`, `c`]; }
+                public guarded() { return [`d`]; }
             }
-            model = new MockModel();
+            const model = new MockModel();
             expect(() => {
                 model.isFillable(`e`);
             }).toThrowError(NotFillableError);
@@ -443,27 +482,27 @@ describe(`Model`, () => {
 
         it(`should convert the models attributes to a JSON string`, () => {
             class MockModel extends Model {
-                fillable() { return [`a`, `b`, `c`]; }
+                public fillable() { return [`a`, `b`, `c`]; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(model.toJSON()).toBe(JSON.stringify({a: 1, b: 2, c: 3}));
         });
 
         it(`should not show hidden attributes`, () => {
             class MockModel extends Model {
-                fillable() { return [`a`, `b`, `c`]; }
-                hidden() { return [`b`]; }
+                public fillable() { return [`a`, `b`, `c`]; }
+                public hidden() { return [`b`]; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(model.toJSON()).toBe(JSON.stringify({a: 1, c: 3}));
         });
 
         it(`should show visible attributes`, () => {
             class MockModel extends Model {
-                fillable() { return [`a`, `b`, `c`]; }
-                visible() { return [`c`]; }
+                public fillable() { return [`a`, `b`, `c`]; }
+                public visible() { return [`c`]; }
             }
-            model = new MockModel(attributes);
+            const model = new MockModel(attributes);
             expect(model.toJSON()).toBe(JSON.stringify({c: 3}));
         });
 

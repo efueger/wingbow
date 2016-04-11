@@ -21,7 +21,7 @@ export abstract class Model {
         this.fill(attributes);
     }
 
-    protected asDate(value :any) :Moment {
+    public asDate(value :any) :Moment {
         if (value instanceof moment) {
             return value;
         }
@@ -31,7 +31,7 @@ export abstract class Model {
         return moment(value, this.getDateFormat());
     }
 
-    protected asTimestamp(value :any) :number {
+    public asTimestamp(value :any) :number {
         const date = this.asDate(value);
         return toTimestamp(date);
     }
@@ -75,23 +75,23 @@ export abstract class Model {
         throw new IllegalCastTypeError(`Could not cast "${key}" to "${caster}"`);
     }
 
-    protected casts() :Object {
+    public casts() :Object {
         return {};
     }
 
-    // protected connection() :string {
+    // public connection() :string {
     //     return `memory`;
     // }
 
-    protected createdAt() :string {
+    public createdAt() :string {
         return `created_at`;
     }
 
-    protected dateFormat() :string {
+    public dateFormat() :string {
         return ``;
     }
 
-    protected dates() :Array<string> {
+    public dates() :Array<string> {
         return [];
     }
 
@@ -108,7 +108,7 @@ export abstract class Model {
         }
     }
 
-    protected fillable() :Array<string> {
+    public fillable() :Array<string> {
         return [];
     }
 
@@ -117,14 +117,14 @@ export abstract class Model {
         return this.serializeDate(date);
     }
 
-    public getAttribute(key :string) :Jsonable|void {
+    public getAttribute(key :string) :any {
         if (this.hasAttribute(key) || this.hasGetMutator(key)) {
             return this.getAttributeValue(key);
         }
         return this.getRelationValue(key);
     }
 
-    public getAttributes() :JsonableObject {
+    public getAttributes() :any {
         const rawAttributes = getRawAttributes(this);
         const attributes = {};
         for (const key in rawAttributes) {
@@ -133,7 +133,7 @@ export abstract class Model {
         return attributes;
     }
 
-    public getAttributeValue(key :string) :any {
+    protected getAttributeValue(key :string) :any {
         const value = getRawAttribute(this, key);
         if (this.hasGetMutator(key)) {
             return this.callGetMutator(key, value);
@@ -214,15 +214,15 @@ export abstract class Model {
         return `${accessor}${toPascalCase(key)}Attribute`;
     }
 
-    public getRelationValue(key :string) :void {
+    protected getRelationValue(key :string) :void {
         // TODO
     }
 
-    protected guarded() :Array<string> {
+    public guarded() :Array<string> {
         return [`*`];
     }
 
-    protected hasAttribute(key :string) :boolean {
+    public hasAttribute(key :string) :boolean {
         const attributes = getRawAttributes(this);
         return hasOwn(attributes, key);
     }
@@ -246,11 +246,11 @@ export abstract class Model {
         return isFunction(this[mutator]);
     }
 
-    protected hidden() :Array<string> {
+    public hidden() :Array<string> {
         return [];
     }
 
-    protected incrementing() :boolean {
+    public incrementing() :boolean {
         return true;
     }
 
@@ -286,11 +286,11 @@ export abstract class Model {
         return this.fillable().length === 0 && this.isFullyGuarded();
     }
 
-    // protected perPage() :number {
+    // public perPage() :number {
     //     return 20;
     // }
 
-    protected primaryKey() :string {
+    public primaryKey() :string {
         return `id`;
     }
 
@@ -313,12 +313,12 @@ export abstract class Model {
         setRawOriginals(this, attributes);
     }
 
-    // protected table() :string {
+    // public table() :string {
     //     const name = this.constructor.name;
     //     return toSnakeCase(name);
     // }
 
-    protected timestamps() :boolean {
+    public timestamps() :boolean {
         return true;
     }
 
@@ -332,11 +332,11 @@ export abstract class Model {
         return Object.assign({}, attributes);
     }
 
-    protected updatedAt() :string {
+    public updatedAt() :string {
         return `updated_at`;
     }
 
-    protected visible() :Array<string> {
+    public visible() :Array<string> {
         return [];
     }
 
