@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import { Model } from 'src/wingbow/database/model';
+import { _setAttributesStore } from 'src/wingbow/database/store';
 import { Jsonable, JsonableObject } from 'src/wingbow/utils/types';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from 'src/wingbow/database/errors';
 
@@ -21,11 +22,14 @@ class MockModel extends Model {
     }
 }
 let attributes = {a: 1, b: 2, c: 3};
+let mockAttributesStore = new Map();
 let model = new MockModel(attributes);
 
 describe(`Model`, () => {
 
     beforeEach(() => {
+        mockAttributesStore = new Map();
+        _setAttributesStore(mockAttributesStore);
         attributes = {a: 1, b: 2, c: 3};
         model = new MockModel(attributes);
     });
@@ -224,6 +228,30 @@ describe(`Model`, () => {
 
         it(`should get all of the attributes for the model`, () => {
             expect(model.getAttributes()).toEqual({a: 1, b: 2, c: 3});
+        });
+
+        it(`should exclude stored prototypal proterties`, () => {
+            const map = new Map();
+            _setAttributesStore(map);
+            let that = null;
+            class MockModel extends Model {
+                constructor(attributes :JsonableObject) {
+                    super(attributes);
+                    that = this;
+                }
+                public fillable() { return [`q`, `r`, `s`]; }
+            }
+            const attributes = {q: 17, r: 18, s: 19};
+            const model = new MockModel(attributes);
+            expect(model.getAttributes()).toEqual({q: 17, r: 18, s: 19});
+            function Store() {
+                this.x = 24;
+                this.z = 26;
+            }
+            Store.prototype.y = 25;
+            const store = new Store();
+            map.set(that, store);
+            expect(model.getAttributes()).toEqual({x: 24, z: 26});
         });
 
     });

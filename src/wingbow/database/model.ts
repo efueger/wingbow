@@ -128,7 +128,9 @@ export abstract class Model {
         const rawAttributes = getRawAttributes(this);
         const attributes = {};
         for (const key in rawAttributes) {
-            attributes[key] = this.getAttribute(key);
+            if (hasOwn(rawAttributes, key)) {
+                attributes[key] = this.getAttribute(key);
+            }
         }
         return attributes;
     }
@@ -230,7 +232,7 @@ export abstract class Model {
     public hasCast(key :string, caster :string = null) :boolean {
         const casts = this.getCasts();
         if (caster === null) {
-            return key in casts;
+            return hasOwn(casts, key);
         }
         return casts[key] === caster;
 
