@@ -1,4 +1,5 @@
 import { hasOwn } from './has-own';
+import { isString } from './is';
 
 function mapValueForDescriptor(values) {
     return Object.keys(values).reduce((previous, current) => {
@@ -18,24 +19,37 @@ export interface RawProtoPropsInterface {
 
 export function Extend (Target) {
 
-    Target.extend = (rawProtoProps :RawProtoPropsInterface = {}, staticProps :Object = {}) :Function => {
+    Target.extend = (rawProtoProps :RawProtoPropsInterface = {}, staticProps :Object = {}, name? :string) :Function => {
 
-        let Surrogate = null;
+        let Child = null;
         const protoProps = mapValueForDescriptor(rawProtoProps);
 
-        if (hasOwn(rawProtoProps, `$constructor`)) {
-            Surrogate = rawProtoProps.$constructor(Target);
-        } else {
-            Surrogate = function () { return Target.apply(this, arguments); };
+        if (isString(name)) {
+            try {
+                /* eslint no-new-func: ["off"] */
+                Child = new Function(`
+                    return function ${name}(_super) {
+                        return _super.apply(this, arguments);
+                    };
+                `)(Target);
+            } catch (err) { /* Do nothing */ }
         }
 
-        Object.assign(Surrogate, Target, staticProps);
-        const proto = Object.assign({}, Target.prototype, Surrogate.prototype);
+        if (!Child) {
+            if (hasOwn(rawProtoProps, `$constructor`)) {
+                Child = rawProtoProps.$constructor(Target);
+            } else {
+                Child = function () { return Target.apply(this, arguments); };
+            }
+        }
 
-        Surrogate.prototype = Object.create(proto, protoProps);
-        Surrogate.prototype.constructor = Surrogate;
+        Object.assign(Child, Target, staticProps);
+        const proto = Object.assign({}, Target.prototype, Child.prototype);
 
-        return Surrogate;
+        Child.prototype = Object.create(proto, protoProps);
+        Child.prototype.constructor = Child;
+
+        return Child;
 
     };
 

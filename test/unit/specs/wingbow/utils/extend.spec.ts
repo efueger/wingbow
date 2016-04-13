@@ -91,6 +91,27 @@ describe(`extend`, () => {
             }).not.toThrow();
         });
 
+        describe(`when a "name" is not supplied`, () => {
+
+            it(`should use the default Surrogate name`, () => {
+                expect(() => {
+                    const User = ParentConstructor.extend();
+                    expect([``, `Surrogate`].indexOf(User.name)).not.toBe(-1);
+                }).not.toThrow();
+            });
+        });
+
+        describe(`when a "name" is supplied`, () => {
+
+            it(`should set the constructors name accordingly`, () => {
+                expect(() => {
+                    const User = ParentConstructor.extend({}, {}, `User`);
+                    expect(User.name).toBe(`User`);
+                }).not.toThrow();
+            });
+
+        });
+
         describe(`when a "$constructor" property is supplied`, () => {
 
             beforeEach(() => {
