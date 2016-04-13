@@ -5,6 +5,7 @@ exports.all = ciAll;
 const doc = require(`./doc`);
 const lint = require(`./lint`);
 const test = require(`./test`);
+const verify = require(`./verify`);
 
 ////////////////////
 
@@ -14,6 +15,7 @@ function ciAll(done) {
     gulp.series(
         test.unit,
         lint.all,
-        doc.all
+        doc.all,
+        verify.all
     )(done);
 }

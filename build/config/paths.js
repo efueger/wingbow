@@ -21,7 +21,9 @@ const dirs = {
 
 const globs = {
     all: `**/*`,
+    gz: `**/*.gz`,
     js: `**/*.js`,
+    map: `**/*.map`,
     ts: `**/*.ts`,
 };
 
@@ -41,7 +43,10 @@ exports.clean = {
         `${dirs.coverage}`,
     ],
     dist: [
-        `${dirs.dist}`,
+        `${dirs.dist}/${globs.gz}`,
+        `${dirs.dist}/${globs.js}`,
+        `${dirs.dist}/${globs.map}`,
+        `${dirs.dist}/${globs.ts}`,
     ],
     docs: [
         `${dirs.docs}`,
@@ -149,6 +154,12 @@ exports.typings = {
     all: [
         `${dirs.typings}/main.d.ts`,
         `${dirs.buildConfig}/ext.d.ts`,
+    ],
+};
+
+exports.verify = {
+    js: [
+        `${dirs.dist}/${globs.js}`,
     ],
 };
 

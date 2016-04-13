@@ -1,7 +1,4 @@
 {
-    "env": {
-        "karma": true
-    },
     "rules": {
         "max-len": ["off"]
     }

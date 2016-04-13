@@ -5,6 +5,7 @@
         "comma-dangle": ["error", "always-multiline"],
         "indent": ["error", 4, {"SwitchCase": 1}],
         "max-len": ["error", 80],
+        "no-eq-null": ["error"],
         "no-use-before-define": ["error", {"classes": true, "functions": false}],
         "object-curly-spacing": ["error", "never"],
         "padded-blocks": ["off"],
