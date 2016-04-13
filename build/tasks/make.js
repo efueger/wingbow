@@ -3,7 +3,7 @@ const gulp = require(`gulp`);
 const clean = require(`./clean`);
 
 const paths = require(`../config/paths`);
-const compile = require(`../lib/compile`);
+const release = require(`../lib/release`);
 
 exports.all = makeAll;
 exports.ts = makeTs;
@@ -23,21 +23,23 @@ gulp.task(makeTs);
 function makeTs(done) {
     gulp.series(
         clean.dist,
-        compileMakeSrc(paths.compile.src)
+        releaseMakeSrc(paths.make.entry)
     )(done);
 }
 
 ////////////////////
 
-function compileMakeSrc(filesRoot) {
-    const fn = function compileMakeSrcTask() {
-        const filesDest = paths.dist.make;
-        const filesGlob = [`${filesRoot}/${paths.make.entry}`];
+function releaseMakeSrc(filesRoot) {
+    const fn = function releaseMakeSrcTask() {
+        const filesDest = paths.make.exit;
+        const filesGlob = [
+            filesRoot,
+        ];
         const options = {
-            outFile: paths.make.exit,
+            outFile: paths.make.file,
         };
-        return compile(filesRoot, filesDest, filesGlob, options);
+        return release(filesRoot, filesDest, filesGlob, options);
     };
-    fn.displayName = `make:compile:${filesRoot.replace(`/`, `:`)}`;
+    fn.displayName = `make:release:${filesRoot.replace(`/`, `:`)}`;
     return fn;
 }

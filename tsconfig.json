@@ -3,7 +3,7 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "module": "umd",
+    "module": "amd",
     "noEmitHelpers": false,
     "removeComments": false,
     "sourceMap": false,

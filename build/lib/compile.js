@@ -9,9 +9,7 @@ const plumb = require(`./plumb`);
 const paths = require(`../config/paths`);
 
 module.exports = function compile(filesRoot, filesDest, filesGlob, options) {
-    const title = filesRoot.replace(`/`, `:`);
     const config = Object.assign({
-        declaration: true,
         typescript: tsc,
     }, options);
     const tsProject = $.typescript.createProject(`tsconfig.json`, config);
@@ -22,16 +20,9 @@ module.exports = function compile(filesRoot, filesDest, filesGlob, options) {
     const js = result.js
         .pipe($.sourcemaps.write(`./`, {
             sourceRoot: path.join(__dirname, `..`, `..`, paths.compile.src),
-        }))
-        .pipe($.size({
-            title: `${title}/*.ts`,
-        }))
+        }));
+    const dts = result.dts;
+    return merge(js, dts)
         .pipe(gulp.dest(filesDest))
         .pipe($.connect.reload());
-    const dts = result.dts
-        .pipe($.size({
-            title: `${title}/*.d.ts`,
-        }))
-        .pipe(gulp.dest(filesDest));
-    return merge(js, dts);
 };

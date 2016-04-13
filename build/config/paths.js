@@ -76,7 +76,7 @@ exports.copy = {
         `${dirs.dist}/${globs.all}`,
     ],
     modules: [
-        `${dirs.nodeModules}/{es6-shim,es7-shim,systemjs}/${globs.all}`,
+        `${dirs.nodeModules}/{es6-shim,es7-shim,moment}/${globs.all}`,
     ],
 };
 
@@ -131,8 +131,13 @@ exports.lint = {
 };
 
 exports.make = {
-    entry: `wingbow.ts`,
-    exit: `wingbow.js`,
+    entry: `${dirs.src}/wingbow.ts`,
+    exit: `${dirs.dist}`,
+    file: `wingbow.js`,
+};
+
+exports.release = {
+    src: `${dirs.src}`,
 };
 
 exports.tmp = {
