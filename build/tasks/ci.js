@@ -13,7 +13,7 @@ ciAll.displayName = `ci`;
 gulp.task(ciAll);
 function ciAll(done) {
     gulp.series(
-        test.unit,
+        test.all,
         lint.all,
         doc.all,
         verify.all

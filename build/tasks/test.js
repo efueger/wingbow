@@ -3,10 +3,10 @@ const gulp = require(`gulp`);
 const KarmaServer = require(`karma`).Server;
 const remapIstanbul = require(`remap-istanbul/lib/gulpRemapIstanbul`);
 const $ = require(`gulp-load-plugins`)();
-const webdriver = require(`gulp-protractor`).webdriver_update;
 
 const clean = require(`./clean`);
 const make = require(`./make`);
+const webdriver = require(`./webdriver`);
 
 const paths = require(`../config/paths`);
 const compile = require(`../lib/compile`);
@@ -24,7 +24,7 @@ testAll.displayName = `test`;
 gulp.task(testAll);
 function testAll(done) {
     gulp.series(
-        // testE2E,
+        testE2E,
         testUnit
     )(done);
 }
@@ -34,11 +34,11 @@ gulp.task(testE2E);
 function testE2E(done) {
     gulp.series(
         clean.testE2E,
-        webdriverUpdate,
         gulp.parallel(
             compileTestE2E(paths.compile.src),
             compileTestE2E(paths.compile.testE2E)
         ),
+        webdriver.update,
         protractorRun
     )(done);
 }
@@ -93,7 +93,9 @@ function compileTestE2E(filesRoot) {
 function compileTestUnit(filesRoot) {
     const fn = function compileTestUnitTask() {
         const filesDest = `${paths.tmp.karma}/${filesRoot}`;
-        const filesGlob = [`${filesRoot}/**/*.ts`];
+        const filesGlob = [
+            `${filesRoot}/**/*.ts`,
+        ];
         const options = {
             compilerOptions: {
                 moduleResolution: `classic`,
@@ -161,9 +163,4 @@ function protractorRun() {
         .on(`error`, (err) => {
             throw err;
         });
-}
-
-webdriverUpdate.displayName = `test:webdriver:update`;
-function webdriverUpdate(done) {
-    webdriver({}, done);
 }

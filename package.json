@@ -20,6 +20,7 @@
     "install": "typings install",
     "test": "gulp ci",
     "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls",
+    "gulp": "gulp",
     "typings": "typings"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "babel-eslint": "^6.0.2",
     "connect-history-api-fallback": "^1.1.0",
     "coveralls": "^2.11.8",
+    "cucumber": "^0.10.2",
     "del": "^2.1.0",
     "eslint": "^2.6.0",
     "eslint-config-airbnb": "^6.2.0",
@@ -48,7 +50,7 @@
     "gulp-jsonlint": "^1.1.2",
     "gulp-load-plugins": "^1.1.0",
     "gulp-plumber": "^1.1.0",
-    "gulp-protractor": "^2.1.0",
+    "gulp-protractor": "^2.3.0",
     "gulp-rename": "^1.2.2",
     "gulp-serve": "^1.2.0",
     "gulp-size": "^2.0.0",
@@ -67,6 +69,8 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "merge2": "^1.0.2",
     "phantomjs-prebuilt": "^2.1.7",
+    "protractor": "^3.2.2",
+    "protractor-cucumber-framework": "^0.5.0",
     "remap-istanbul": "0.4.0",
     "require-dir": "^0.3.0",
     "systemjs": "^0.19.23",

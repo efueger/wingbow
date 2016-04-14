@@ -32,6 +32,7 @@ const files = {
     gulpfile: `gulpfile.js`,
     karmaConf: `karma.conf.js`,
     pkg: `package.json`,
+    protractorConf: `protractor.conf.js`,
     travis: `.travis.yml`,
     tsconfig: `tsconfig.json`,
     tslint: `tslint.json`,
@@ -110,21 +111,22 @@ exports.docs = {
 
 exports.lint = {
     js: [
-        `${files.gulpfile}`,
-        `${files.karmaConf}`,
         `${dirs.build}/${globs.js}`,
         `${dirs.testE2E}/${globs.js}`,
         `${dirs.testUnit}/${globs.js}`,
+        `${files.gulpfile}`,
+        `${files.karmaConf}`,
+        `${files.protractorConf}`,
     ],
     json: [
+        `${dirs.testE2E}/${files.eslintrc}`,
+        `${dirs.testUnit}/${files.eslintrc}`,
+        `${dirs.test}/${files.eslintrc}`,
         `${files.eslintrc}`,
         `${files.pkg}`,
         `${files.tsconfig}`,
         `${files.tslint}`,
         `${files.typings}`,
-        `${dirs.test}/${files.eslintrc}`,
-        `${dirs.testE2E}/${files.eslintrc}`,
-        `${dirs.testUnit}/${files.eslintrc}`,
     ],
     ts: [
         `${dirs.src}/${globs.ts}`,
@@ -165,10 +167,10 @@ exports.verify = {
 
 exports.watch = {
     js: [
-        `${files.gulpfile}`,
-        `${files.karmaConf}`,
         `${dirs.build}/${globs.js}`,
         `${dirs.testE2E}/${globs.js}`,
+        `${files.gulpfile}`,
+        `${files.karmaConf}`,
     ],
     testManual: [
         `${dirs.testManual}/index.html`,

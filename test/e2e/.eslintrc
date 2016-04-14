@@ -1,9 +1,5 @@
 {
     "env": {
-        "protractor": true,
-        "jasmine": true
-    },
-    "rules": {
-        "no-var": ["off"]
+        "protractor": true
     }
 }
