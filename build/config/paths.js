@@ -87,26 +87,18 @@ exports.copy = {
 };
 
 exports.coverage = {
+    dist: `${dirs.coverage}`,
     html: `${dirs.coverage}/html`,
     lcov: `${dirs.coverage}/lcov/lcov.info`,
     remapPre: `${dirs.coverage}/json/coverage-pre.json`,
     remapPost: `${dirs.coverage}/json/coverage-post.json`,
 };
 
-exports.dist = {
-    docs: `${dirs.docs}`,
-    make: `${dirs.dist}`,
-    coverage: `${dirs.coverage}`,
-    testManual: `${dirs.testManual}`,
-    testManualDist: `${dirs.testManualDist}`,
-    testManualModules: `${dirs.testManualModules}`,
-    testUnit: `${dirs.testUnit}`,
-};
-
 exports.docs = {
     all: [
         `${dirs.src}/${globs.ts}`,
     ],
+    dist: `${dirs.docs}`,
 };
 
 exports.lint = {
@@ -119,9 +111,9 @@ exports.lint = {
         `${files.protractorConf}`,
     ],
     json: [
-        `${dirs.testE2E}/${files.eslintrc}`,
-        `${dirs.testUnit}/${files.eslintrc}`,
         `${dirs.test}/${files.eslintrc}`,
+        `${dirs.testUnit}/${files.eslintrc}`,
+        `${dirs.testE2E}/${files.eslintrc}`,
         `${files.eslintrc}`,
         `${files.pkg}`,
         `${files.tsconfig}`,
@@ -130,6 +122,7 @@ exports.lint = {
     ],
     ts: [
         `${dirs.src}/${globs.ts}`,
+        `${dirs.testE2E}/${globs.ts}`,
         `${dirs.testUnit}/${globs.ts}`,
     ],
     yml: [
@@ -138,6 +131,7 @@ exports.lint = {
 };
 
 exports.make = {
+    dist: `${dirs.dist}`,
     entry: `${dirs.src}/wingbow.ts`,
     exit: `${dirs.dist}`,
     file: `wingbow.js`,
@@ -145,6 +139,14 @@ exports.make = {
 
 exports.release = {
     src: `${dirs.src}`,
+};
+
+exports.test = {
+    e2e: `${dirs.testE2E}`,
+    manual: `${dirs.testManual}`,
+    manualDist: `${dirs.testManualDist}`,
+    manualModules: `${dirs.testManualModules}`,
+    unit: `${dirs.testUnit}`,
 };
 
 exports.tmp = {
@@ -168,15 +170,26 @@ exports.verify = {
 exports.watch = {
     js: [
         `${dirs.build}/${globs.js}`,
-        `${dirs.testE2E}/${globs.js}`,
         `${files.gulpfile}`,
         `${files.karmaConf}`,
+        `${files.protractorConf}`,
+    ],
+    json: [
+        `${dirs.test}/${files.eslintrc}`,
+        `${dirs.testE2E}/${files.eslintrc}`,
+        `${dirs.testUnit}/${files.eslintrc}`,
+        `${files.eslintrc}`,
+        `${files.pkg}`,
+        `${files.tsconfig}`,
+        `${files.tslint}`,
+        `${files.typings}`,
     ],
     testManual: [
         `${dirs.testManual}/index.html`,
     ],
     ts: [
         `${dirs.src}/${globs.ts}`,
+        `${dirs.testE2E}/${globs.ts}`,
         `${dirs.testUnit}/${globs.ts}`,
     ],
 };

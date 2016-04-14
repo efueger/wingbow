@@ -8,6 +8,7 @@ const paths = require(`../config/paths`);
 
 exports.all = watchAll;
 exports.js = watchJs;
+exports.json = watchJson;
 exports.testManual = watchTestManual;
 exports.ts = watchTs;
 
@@ -28,6 +29,14 @@ gulp.task(watchJs);
 function watchJs() {
     gulp.watch(paths.watch.js, gulp.series(
         lint.js
+    ));
+}
+
+watchJson.displayName = `watch:json`;
+gulp.task(watchJson);
+function watchJson() {
+    gulp.watch(paths.watch.json, gulp.series(
+        lint.json
     ));
 }
 

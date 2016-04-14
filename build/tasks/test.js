@@ -119,14 +119,14 @@ copyTestManualDist.displayName = `test:copy:test:manual:dist`;
 function copyTestManualDist() {
     return gulp.src(paths.copy.dist)
         .pipe($.plumber(plumb))
-        .pipe(gulp.dest(paths.dist.testManualDist));
+        .pipe(gulp.dest(paths.test.manualDist));
 }
 
 copyTestManualModules.displayName = `test:copy:test:manual:modules`;
 function copyTestManualModules() {
     return gulp.src(paths.copy.modules)
         .pipe($.plumber(plumb))
-        .pipe(gulp.dest(paths.dist.testManualModules));
+        .pipe(gulp.dest(paths.test.manualModules));
 }
 
 karmaRemapCoverage.displayName = `test:karma:remap:coverage`;

@@ -46,6 +46,6 @@ function docTsAll() {
             module: `commonjs`,
             target: `ES5`,
             experimentalDecorators: true,
-            out: paths.dist.docs,
+            out: paths.docs.dist,
         }));
 }

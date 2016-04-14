@@ -110,7 +110,7 @@ module.exports = function karmaConf(karma) {
         // https://github.com/karma-runner/karma-coverage
         // configure the where we want the report to be saved
         coverageReporter: {
-            dir: path.join(__dirname, paths.dist.coverage),
+            dir: path.join(__dirname, paths.coverage.dist),
             includeAllSources: true,
             reporters: [
                 {

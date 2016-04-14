@@ -23,7 +23,7 @@ function World() {
     });
 
     this.Given(/^I select "([^"]*)" from "([^"]*)"$/, (text, selector) => {
-        const option = element(by.cssContainingText(`${selector} option`, text))
+        const option = element(by.cssContainingText(`${selector} option`, text));
         assert(option.isPresent(), `could not find "${selector} option{${text}}"`);
         return option.click();
     });

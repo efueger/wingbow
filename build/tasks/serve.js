@@ -37,7 +37,7 @@ function serveDist(done) {
         make.all,
         gulp.parallel(
             watch.all,
-            livereload(paths.dist.make)
+            livereload(paths.make.dist)
         )
     )(done);
 }
@@ -49,7 +49,7 @@ function serveDocs(done) {
         doc.all,
         gulp.parallel(
             watch.all,
-            livereload(paths.dist.docs)
+            livereload(paths.docs.dist)
         )
     )(done);
 }
@@ -61,7 +61,7 @@ function serveManual(done) {
         test.manual,
         gulp.parallel(
             watch.all,
-            livereload(paths.dist.testManual)
+            livereload(paths.test.manual)
         )
     )(done);
 }
