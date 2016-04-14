@@ -30,13 +30,11 @@ before_install:
   - $CXX --version
   - npm install --global npm
   - npm --version
-  - npm install --global gulpjs/gulp-cli#4.0 typings
+  - npm install --global gulpjs/gulp-cli#4.0
   - gulp --version
-  - typings --version --no-insight
 
 install:
   - npm install
-  - typings install
   - du -sh node_modules || true
 
 before_script:
