@@ -2,6 +2,7 @@
 // Generated on Thu Mar 10 2016 06:26:49 GMT+1100 (AEDT)
 
 const path = require(`path`);
+const isCI = require(`./build/lib/is-ci`);
 const paths = require(`./build/config/paths`);
 
 /* eslint max-len: ["off"] */
@@ -18,7 +19,7 @@ module.exports = function karmaConf(karma) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            `PhantomJS`,
+            `Chrome`,
         ],
 
         // the maximum bootup time for a browser
@@ -33,7 +34,7 @@ module.exports = function karmaConf(karma) {
 
         // configure custom launchers
         customLaunchers: {
-            ChromeTravisCI: {
+            ChromeCI: {
                 base: `Chrome`,
                 flags: [`--no-sandbox`],
             },
@@ -123,13 +124,8 @@ module.exports = function karmaConf(karma) {
 
     };
 
-    /**
-     * `PhantomJS` support is limited in Travis CI so we use `Chrome` instead.
-     * Note that we also need to configure Travis so it enables Chrome.
-     * See `before_script` in the `.travis.yml` file.
-     */
-    if (process.env.TRAVIS) {
-        config.browsers = [`ChromeTravisCI`];
+    if (isCI) {
+        config.browsers = [`ChromeCI`];
     }
 
     karma.set(config);

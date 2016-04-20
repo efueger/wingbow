@@ -30,7 +30,7 @@ before_install:
   - $CXX --version
   - npm install --global npm
   - npm --version
-  - npm install --global gulpjs/gulp-cli#4.0
+  - npm install --global gulp-cli
   - gulp --version
 
 install:

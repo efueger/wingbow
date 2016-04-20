@@ -143,6 +143,9 @@ exports.release = {
 
 exports.test = {
     e2e: `${dirs.testE2E}`,
+    e2eFeatures: `${dirs.testE2E}/features/**/*.feature`,
+    e2eSteps: `${dirs.testE2E}/steps/**/*.step.js`,
+    e2eWorld: `${dirs.testE2E}/world.js`,
     manual: `${dirs.testManual}`,
     manualDist: `${dirs.testManualDist}`,
     manualModules: `${dirs.testManualModules}`,
