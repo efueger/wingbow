@@ -13,8 +13,11 @@ exports.ts = makeTs;
 makeAll.displayName = `make`;
 gulp.task(makeAll);
 function makeAll(done) {
-    gulp.parallel(
-        makeTs
+    gulp.series(
+        clean.dist,
+        gulp.parallel(
+            makeTs
+        )
     )(done);
 }
 
@@ -22,15 +25,14 @@ makeTs.displayName = `make:ts`;
 gulp.task(makeTs);
 function makeTs(done) {
     gulp.series(
-        clean.dist,
-        releaseMakeSrc(paths.make.entry)
+        makeTsRelease(paths.make.entry)
     )(done);
 }
 
 ////////////////////
 
-function releaseMakeSrc(filesRoot) {
-    const fn = function releaseMakeSrcTask() {
+function makeTsRelease(filesRoot) {
+    const fn = function makeTsReleaseTask() {
         const filesDest = paths.make.exit;
         const filesGlob = [
             filesRoot,
@@ -40,6 +42,6 @@ function releaseMakeSrc(filesRoot) {
         };
         return release(filesRoot, filesDest, filesGlob, options);
     };
-    fn.displayName = `make:release:${filesRoot.replace(`/`, `:`)}`;
+    fn.displayName = `make:ts:release`;
     return fn;
 }

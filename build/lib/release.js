@@ -89,7 +89,11 @@ function release(filesRoot, filesDest, filesGlob, options) {
             .pipe($.size({
                 showFiles: true,
             }));
-        return merge(js, dts)
-        .pipe(gulp.dest(filesDest));
+        return new Promise((resolve, reject) => {
+            merge(js, dts)
+                .on(`finish`, resolve)
+                .on(`error`, reject)
+                .pipe(gulp.dest(filesDest));
+        });
     });
 }
