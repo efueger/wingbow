@@ -76,6 +76,6 @@
     "systemjs": "^0.19.23",
     "tslint": "^3.6.0",
     "typescript": "^1.9.0-dev.20160331",
-    "typings": "^0.7.12"
+    "typings": "^0.8.1"
   }
 }
