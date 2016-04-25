@@ -178,6 +178,7 @@ exports.watch = {
         `${files.protractorConf}`,
     ],
     json: [
+        `${dirs.dist}/${files.eslintrc}`,
         `${dirs.test}/${files.eslintrc}`,
         `${dirs.testE2E}/${files.eslintrc}`,
         `${dirs.testUnit}/${files.eslintrc}`,

@@ -8,6 +8,7 @@
         "moment": false
     },
     "rules": {
+        "block-spacing": ["off"],
         "camelcase": ["off"],
         "comma-dangle": ["off"],
         "comma-spacing": ["off"],
@@ -16,6 +17,7 @@
         "default-case": ["off"],
         "eqeqeq": ["off"],
         "func-names": ["off"],
+        "global-require": ["off"],
         "guard-for-in": ["off"],
         "indent": ["off"],
         "key-spacing": ["off"],
@@ -28,9 +30,11 @@
         "no-nested-ternary": ["off"],
         "no-new-func": ["off"],
         "no-param-reassign": ["off"],
+        "no-restricted-syntax": ["off"],
         "no-sequences": ["off"],
         "no-shadow": ["off"],
         "no-shadow-restricted-names": ["off"],
+        "no-underscore-dangle": ["off"],
         "no-unused-expressions": ["off"],
         "no-unused-vars": ["off"],
         "no-use-before-define": ["off"],
@@ -47,6 +51,7 @@
         "space-before-function-paren": ["off"],
         "space-infix-ops": ["off"],
         "spaced-comment": ["off"],
+        "strict": ["off"],
         "vars-on-top": ["off"],
         "wrap-iife": ["off"],
         "yoda": ["off"]
