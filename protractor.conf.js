@@ -1,5 +1,7 @@
 const chromeBinary = require(`chromedriver`).path;
 const cucumberPath = require.resolve(`protractor-cucumber-framework`);
+const phantomjsBinary = require(`phantomjs-prebuilt`).path;
+
 const isCI = require(`./build/lib/is-ci`);
 const paths = require(`./build/config/paths`);
 
@@ -30,7 +32,6 @@ const protractorConf = {
 };
 
 if (isCI) {
-    const phantomjsBinary = require(`phantomjs-prebuilt`).path;
     protractorConf.multiCapabilities = [
         {
             browserName: `phantomjs`,

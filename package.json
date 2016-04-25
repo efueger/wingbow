@@ -36,9 +36,12 @@
     "coveralls": "^2.11.8",
     "cucumber": "^0.10.2",
     "del": "^2.1.0",
-    "eslint": "^2.6.0",
-    "eslint-config-airbnb": "^6.2.0",
+    "eslint": "^2.8.0",
+    "eslint-config-airbnb": "^8.0.0",
     "eslint-friendly-formatter": "^2.0.0",
+    "eslint-plugin-import": "^1.5.0",
+    "eslint-plugin-jsx-a11y": "^1.0.2",
+    "eslint-plugin-react": "^5.0.1",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-amdcleaner": "^1.0.1",
     "gulp-connect": "^3.2.2",
@@ -75,7 +78,7 @@
     "remap-istanbul": "0.6.3",
     "require-dir": "^0.3.0",
     "systemjs": "^0.19.23",
-    "tslint": "^3.6.0",
+    "tslint": "^3.7.0",
     "typescript": "^1.9.0-dev.20160331",
     "typings": "^0.8.1"
   }

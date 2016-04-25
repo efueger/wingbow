@@ -1,6 +1,7 @@
 const gulp = require(`gulp`);
 const log = require(`@whitneyit/log`);
 const $ = require(`gulp-load-plugins`)();
+const eslintFriendlyFormatter = require(`eslint-friendly-formatter`);
 
 const paths = require(`../config/paths`);
 const plumb = require(`../lib/plumb`);
@@ -30,7 +31,7 @@ function lintJs() {
     return gulp.src(paths.lint.js)
         .pipe($.plumber(plumb))
         .pipe($.eslint())
-        .pipe($.eslint.format(require(`eslint-friendly-formatter`)))
+        .pipe($.eslint.format(eslintFriendlyFormatter))
         .pipe($.eslint.failAfterError());
 }
 

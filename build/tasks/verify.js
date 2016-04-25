@@ -1,5 +1,6 @@
 const gulp = require(`gulp`);
 const $ = require(`gulp-load-plugins`)();
+const eslintFriendlyFormatter = require(`eslint-friendly-formatter`);
 
 const paths = require(`../config/paths`);
 const plumb = require(`../lib/plumb`);
@@ -23,6 +24,6 @@ function verifyJs() {
     return gulp.src(paths.verify.js)
         .pipe($.plumber(plumb))
         .pipe($.eslint())
-        .pipe($.eslint.format(require(`eslint-friendly-formatter`)))
+        .pipe($.eslint.format(eslintFriendlyFormatter))
         .pipe($.eslint.failAfterError());
 }
