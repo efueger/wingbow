@@ -1,4 +1,3 @@
-const fs = require(`fs`);
 const path = require(`path`);
 const merge = require(`merge2`);
 const gulp = require(`gulp`);
@@ -6,17 +5,11 @@ const $ = require(`gulp-load-plugins`)();
 const tsc = require(`typescript`);
 
 const getSha = require(`./get-sha`);
-
 const pkg = require(`../../package.json`);
-
 const paths = require(`../config/paths`);
+const header = require(`../includes/header`);
+const footer = require(`../includes/footer`);
 
-const header = fs.readFileSync(`build/includes/header.ejs`);
-const footer = fs.readFileSync(`build/includes/footer.ejs`);
-
-const filterGzip = $.filter([`**/*`, `!**/*.map`], {restore: true});
-const filterMaps = $.filter([`**/*`, `!**/*.map`], {restore: true});
-const removeMaps = $.filter([`**/*`, `!**/*.map`]);
 const sourceRoot = path.join(__dirname, `..`, `..`, paths.release.src);
 
 module.exports = release;
@@ -24,13 +17,16 @@ module.exports = release;
 ////////////////////
 
 function release(filesRoot, filesDest, filesGlob, options) {
+    const nameTs = path.basename(filesRoot);
+    const nameNoExt = nameTs.replace(/\.ts$/, ``);
     return getSha().then(sha => {
+        const filterGzip = $.filter([`**/*`, `!**/*.map`], {restore: true});
+        const filterMaps = $.filter([`**/*`, `!**/*.map`], {restore: true});
+        const removeMaps = $.filter([`**/*`, `!**/*.map`]);
         const stamp = {
             pkg,
             sha,
         };
-        const nameTs = path.basename(filesRoot);
-        const nameNoExt = nameTs.replace(/\.ts$/, ``);
         const config = Object.assign({
             declaration: true,
             typescript: tsc,

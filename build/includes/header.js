@@ -1,3 +1,4 @@
+module.exports = `
 <%
     var
         date = new Date();
@@ -33,7 +34,6 @@ if (typeof module !== 'undefined' && module.exports) {
 } else {
     root.<%= pkg.name %> = factory(moment);
 }
-})(this, function (moment, undefined) {
+})(this, function (moment, undefined) { 'use strict';
 
-'use strict';
-
+`;
