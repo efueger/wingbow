@@ -15,7 +15,7 @@ function webdriverAll(done) {
     )(done);
 }
 
-webdriverUpdate.displayName = `webdrivre:update`;
+webdriverUpdate.displayName = `webdriver:update`;
 gulp.task(webdriverUpdate);
 function webdriverUpdate(done) {
     webdriver({}, done);

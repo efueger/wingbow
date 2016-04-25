@@ -6,8 +6,12 @@ describe(`wingbow`, () => {
         expect(true).toBe(true);
     });
 
-    it(`should only expose "database"`, () => {
-        expect(Object.keys(wingbow)).toEqual([`database`]);
+    it(`should expose "database"`, () => {
+        expect(wingbow.database).not.toBe(undefined);
+    });
+
+    it(`should expose "utils"`, () => {
+        expect(wingbow.utils).not.toBe(undefined);
     });
 
 });

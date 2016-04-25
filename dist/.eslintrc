@@ -8,6 +8,7 @@
         "moment": false
     },
     "rules": {
+        "block-scoped-var": ["off"],
         "block-spacing": ["off"],
         "camelcase": ["off"],
         "comma-dangle": ["off"],
@@ -39,6 +40,7 @@
         "no-unused-vars": ["off"],
         "no-use-before-define": ["off"],
         "no-var": ["off"],
+        "object-shorthand": ["off"],
         "one-var": ["off"],
         "one-var-declaration-per-line": ["off"],
         "prefer-arrow-callback": ["off"],
