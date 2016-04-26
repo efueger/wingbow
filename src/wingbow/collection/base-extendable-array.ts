@@ -1,22 +1,21 @@
-import { hasOwn } from './has-own';
+import { hasOwn } from '../utils/has-own';
 
 export const MAX_ARRAY_LENGTH = Math.pow(2, 32) - 1;
 export function ToUint32(value :any) :number {
     return value >>> 0;
 }
 
-export interface BaseCollectionInstance<T> extends Array<T> {
+export interface BaseExtendableArrayInstance<T> extends Array<T> {
     length :number;
     [n :number] :T;
 }
 
-export interface BaseCollection<T> {
-    new <T>(...items :Array<T>): BaseCollectionInstance<T>;
-    new (...items :Array<any>): BaseCollectionInstance<any>;
-    prototype :BaseCollectionInstance<any>;
+export interface BaseExtendableArray<T> {
+    new <T>(...items :Array<T>): BaseExtendableArrayInstance<T>;
+    prototype :BaseExtendableArrayInstance<T>;
 }
 
-export const BaseCollection :BaseCollection<any> = function(...args) {
+export const BaseExtendableArray :BaseExtendableArray<any> = function(...args) {
     this.push.apply(this, args);
     let _length = 0;
     Object.defineProperty(this, 'length', {
@@ -55,5 +54,5 @@ export const BaseCollection :BaseCollection<any> = function(...args) {
     });
 } as any;
 
-BaseCollection.prototype = Object.create(Array.prototype);
-BaseCollection.prototype.constructor = BaseCollection;
+BaseExtendableArray.prototype = Object.create(Array.prototype);
+BaseExtendableArray.prototype.constructor = BaseExtendableArray;

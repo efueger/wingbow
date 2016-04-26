@@ -316,7 +316,7 @@ export abstract class Model {
     }
 
     // public table() :string {
-    //     const name = this.constructor.name;
+    //     const name = this.constructor[Symbol.species].name;
     //     return toSnakeCase(name);
     // }
 

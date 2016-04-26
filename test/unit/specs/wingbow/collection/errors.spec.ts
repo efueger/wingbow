@@ -1,4 +1,4 @@
-import { IllegalOperatorError } from 'src/wingbow/utils/errors';
+import { IllegalOperatorError } from 'src/wingbow/collection/errors';
 
 describe(`errors`, () => {
 

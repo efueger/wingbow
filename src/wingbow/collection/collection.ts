@@ -1,65 +1,32 @@
-import { Jsonable } from './types';
-import { isFunction } from './is';
-import { toNumberOrNaN } from './to';
-import { IllegalOperatorError } from './errors';
-import { BaseCollection, BaseCollectionInstance } from './base-collection';
+import { Jsonable } from '../utils/types';
+import { isFunction } from '../utils/is';
+import { toNumberOrNaN } from '../utils/to';
+import { IllegalOperatorError } from '../collection/errors';
+import { ExtendableArray, ExtendableArrayInstance } from './extendable-array';
 
-export interface CollectionInstance<T> extends BaseCollectionInstance<T> {
+export interface CollectionInstance<T> extends ExtendableArrayInstance<T> {
     readonly length :number;
     readonly [n :number] :T;
 }
 
 export interface Collection<T> {
     new <T>(...items :Array<T>): CollectionInstance<T>;
-    new (...items :Array<any>): CollectionInstance<any>;
     readonly prototype :CollectionInstance<any>;
 }
 
-export class Collection<T> extends BaseCollection<T> {
+export class Collection<T> extends ExtendableArray<T> {
 
-    constructor(...args) {
-        super(...args);
-    }
-
-    concat(...args) :Collection<T> {
-        const arr = this.toArray();
-        const result = arr.concat(...args);
-        return new Collection<T>(...result);
-    }
-
-    filter(callbackfn, thisArg?) :Collection<T> {
-        const result = super.filter(callbackfn, thisArg);
-        return new Collection<T>(...result);
-    }
-
-    first() :T {
+    public first() :T {
         return this[0];
     }
 
-    last() :T {
+    public last() :T {
         return this[this.length - 1];
     }
 
-    map(callbackfn, thisArg?) :Collection<T> {
-        const result = super.map(callbackfn, thisArg);
-        return new Collection<T>(...result);
-    }
-
-    slice(callbackfn, thisArg?) :Collection<T> {
-        const result = super.slice(callbackfn, thisArg);
-        return new Collection<T>(...result);
-    }
-
-    splice(callbackfn, thisArg?) :Collection<T> {
-        const result = super.splice(callbackfn, thisArg);
-        return new Collection<T>(...result);
-    }
-
-    toArray() :Array<T> {
-        return Array.from<T>(this);
-    }
-
-    where(key? :string, operator? :string|Function, value? :Jsonable) :Collection<T> {
+    public where(key? :string, operator? :Function, value? :Jsonable);
+    public where(key? :string, operator? :string, value? :Jsonable);
+    public where(key, operator, value) {
         if (arguments.length === 0) {
             return this.filter(item => false);
         }
