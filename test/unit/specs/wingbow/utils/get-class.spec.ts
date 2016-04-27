@@ -1,5 +1,8 @@
 import { getClass } from 'src/wingbow/utils/get-class';
 
+const args = (function iife(a, b, c) { return arguments; })(`a`, `b`, `c`);
+const arrLikeObj = {0: `a`, 1: `b`, 2: `c`, length: 3};
+
 describe(`getClass`, () => {
 
     describe(`Array`, () => {
@@ -7,6 +10,15 @@ describe(`getClass`, () => {
         it(`should return "array" when passed an Array`, () => {
             expect(getClass(new Array())).toBe(`array`);
             expect(getClass([])).toBe(`array`);
+        });
+
+    });
+
+    describe(`ArrayLike`, () => {
+
+        it(`should return "object" when passed an ArrayLike Object`, () => {
+            expect(getClass(args)).toBe(`object`);
+            expect(getClass(arrLikeObj)).toBe(`object`);
         });
 
     });

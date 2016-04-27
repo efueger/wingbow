@@ -1,7 +1,7 @@
 import { Jsonable } from '../utils/types';
-import { isFunction } from '../utils/is';
 import { toNumberOrNaN } from '../utils/to';
 import { IllegalOperatorError } from '../collection/errors';
+import { isArrayLike, isFunction } from '../utils/is';
 import { ExtendableArray, ExtendableArrayInstance } from './extendable-array';
 
 export interface CollectionInstance<T> extends ExtendableArrayInstance<T> {

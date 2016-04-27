@@ -1,7 +1,28 @@
 import { getClass } from './get-class';
+import { MAX_ARRAY_LENGTH } from './max-array-length';
 
 export function isArray<T>(item :any) :item is Array<T> {
     return getClass(item) === `array`;
+}
+
+export function isArrayLike(item :any) :boolean {
+    if (item === null || item === undefined) {
+        return false;
+    }
+    if (isArray(item) || isString(item)) {
+        return true;
+    }
+    if (isFunction(item)) {
+        return false;
+    }
+    const len = item.length;
+    if (len === 0) {
+        return true;
+    }
+    if (!isNumber(len) || len < 0 || len % 1 !== 0 || len > MAX_ARRAY_LENGTH) {
+        return false;
+    }
+    return (len - 1) in item;
 }
 
 export function isBoolean(item :any) :item is Boolean {

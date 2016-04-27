@@ -1,5 +1,6 @@
 import {
     isArray,
+    isArrayLike,
     isBoolean,
     isDate,
     isError,
@@ -12,6 +13,9 @@ import {
     isUndefined,
 } from 'src/wingbow/utils/is';
 
+const args = (function iife(a, b, c) { return arguments; })(`a`, `b`, `c`);
+const arrLikeObj = {0: `a`, 1: `b`, 2: `c`, length: 3};
+
 describe(`is`, () => {
 
     describe(`isArray`, () => {
@@ -22,6 +26,8 @@ describe(`is`, () => {
         });
 
         it(`should return "false" when not passed an Array`, () => {
+            expect(isArray(args)).toBe(false);
+            expect(isArray(arrLikeObj)).toBe(false);
             expect(isArray(new Boolean())).toBe(false);
             expect(isArray(true)).toBe(false);
             expect(isArray(new Date())).toBe(false);
@@ -42,6 +48,37 @@ describe(`is`, () => {
 
     });
 
+    describe(`isArrayLike`, () => {
+
+        it(`should return "true" when passed an ArrayLike Object`, () => {
+            expect(isArrayLike(new Array())).toBe(true);
+            expect(isArrayLike([])).toBe(true);
+            expect(isArrayLike(args)).toBe(true);
+            expect(isArrayLike(arrLikeObj)).toBe(true);
+            expect(isArrayLike({length: 0})).toBe(true);
+            expect(isArrayLike(new String())).toBe(true);
+            expect(isArrayLike(``)).toBe(true);
+        });
+
+        it(`should return "false" when not passed an ArrayLike Object`, () => {
+            expect(isArrayLike(new Boolean())).toBe(false);
+            expect(isArrayLike(true)).toBe(false);
+            expect(isArrayLike(new Date())).toBe(false);
+            expect(isArrayLike(new Error())).toBe(false);
+            expect(isArrayLike(new Function())).toBe(false);
+            expect(isArrayLike(function () {})).toBe(false);
+            expect(isArrayLike(null)).toBe(false);
+            expect(isArrayLike(new Number())).toBe(false);
+            expect(isArrayLike(0)).toBe(false);
+            expect(isArrayLike(new Object())).toBe(false);
+            expect(isArrayLike({})).toBe(false);
+            expect(isArrayLike(new RegExp(`regexp`))).toBe(false);
+            expect(isArrayLike(/regexp/)).toBe(false);
+            expect(isArrayLike(undefined)).toBe(false);
+        });
+
+    });
+
     describe(`isBoolean`, () => {
 
         it(`should return "true" when passed a Boolean`, () => {
@@ -52,6 +89,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed a Boolean`, () => {
             expect(isBoolean(new Array())).toBe(false);
             expect(isBoolean([])).toBe(false);
+            expect(isBoolean(args)).toBe(false);
+            expect(isBoolean(arrLikeObj)).toBe(false);
             expect(isBoolean(new Date())).toBe(false);
             expect(isBoolean(new Error())).toBe(false);
             expect(isBoolean(new Function())).toBe(false);
@@ -79,6 +118,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed a Date`, () => {
             expect(isDate(new Array())).toBe(false);
             expect(isDate([])).toBe(false);
+            expect(isDate(args)).toBe(false);
+            expect(isDate(arrLikeObj)).toBe(false);
             expect(isDate(new Boolean())).toBe(false);
             expect(isDate(true)).toBe(false);
             expect(isDate(new Error())).toBe(false);
@@ -107,6 +148,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed an Error`, () => {
             expect(isError(new Array())).toBe(false);
             expect(isError([])).toBe(false);
+            expect(isError(args)).toBe(false);
+            expect(isError(arrLikeObj)).toBe(false);
             expect(isError(new Boolean())).toBe(false);
             expect(isError(true)).toBe(false);
             expect(isError(new Date())).toBe(false);
@@ -136,6 +179,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed a Function`, () => {
             expect(isFunction(new Array())).toBe(false);
             expect(isFunction([])).toBe(false);
+            expect(isFunction(args)).toBe(false);
+            expect(isFunction(arrLikeObj)).toBe(false);
             expect(isFunction(new Boolean())).toBe(false);
             expect(isFunction(true)).toBe(false);
             expect(isFunction(new Date())).toBe(false);
@@ -163,6 +208,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed null`, () => {
             expect(isNull(new Array())).toBe(false);
             expect(isNull([])).toBe(false);
+            expect(isNull(args)).toBe(false);
+            expect(isNull(arrLikeObj)).toBe(false);
             expect(isNull(new Boolean())).toBe(false);
             expect(isNull(true)).toBe(false);
             expect(isNull(new Date())).toBe(false);
@@ -192,6 +239,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed a Number`, () => {
             expect(isNumber(new Array())).toBe(false);
             expect(isNumber([])).toBe(false);
+            expect(isNumber(args)).toBe(false);
+            expect(isNumber(arrLikeObj)).toBe(false);
             expect(isNumber(new Boolean())).toBe(false);
             expect(isNumber(true)).toBe(false);
             expect(isNumber(new Date())).toBe(false);
@@ -213,6 +262,8 @@ describe(`is`, () => {
     describe(`isObject`, () => {
 
         it(`should return "true" when passed an Object`, () => {
+            expect(isObject(args)).toBe(true);
+            expect(isObject(arrLikeObj)).toBe(true);
             expect(isObject(new Object())).toBe(true);
             expect(isObject({})).toBe(true);
         });
@@ -248,6 +299,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed a RegExp`, () => {
             expect(isRegExp(new Array())).toBe(false);
             expect(isRegExp([])).toBe(false);
+            expect(isRegExp(args)).toBe(false);
+            expect(isRegExp(arrLikeObj)).toBe(false);
             expect(isRegExp(new Boolean())).toBe(false);
             expect(isRegExp(true)).toBe(false);
             expect(isRegExp(new Date())).toBe(false);
@@ -276,6 +329,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed a String`, () => {
             expect(isString(new Array())).toBe(false);
             expect(isString([])).toBe(false);
+            expect(isString(args)).toBe(false);
+            expect(isString(arrLikeObj)).toBe(false);
             expect(isString(new Boolean())).toBe(false);
             expect(isString(true)).toBe(false);
             expect(isString(new Date())).toBe(false);
@@ -303,6 +358,8 @@ describe(`is`, () => {
         it(`should return "false" when not passed undefined`, () => {
             expect(isUndefined(new Array())).toBe(false);
             expect(isUndefined([])).toBe(false);
+            expect(isUndefined(args)).toBe(false);
+            expect(isUndefined(arrLikeObj)).toBe(false);
             expect(isUndefined(new Boolean())).toBe(false);
             expect(isUndefined(true)).toBe(false);
             expect(isUndefined(new Date())).toBe(false);
