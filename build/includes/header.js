@@ -35,5 +35,4 @@ if (typeof module !== 'undefined' && module.exports) {
     root.<%= pkg.name %> = factory(moment);
 }
 })(this, function (moment, undefined) { 'use strict';
-
 `;

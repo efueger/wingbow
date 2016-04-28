@@ -52,6 +52,9 @@ module.exports = function karmaConf(karma) {
             {pattern: `node_modules/moment/moment.js`, included: true},
             {pattern: `node_modules/systemjs/dist/system-polyfills.src.js`, included: true},
             {pattern: `node_modules/systemjs/dist/system.src.js`, included: true},
+            {pattern: `build/helpers/decorate.js`, included: true},
+            {pattern: `build/helpers/extends.js`, included: true},
+            {pattern: `build/helpers/metadata.js`, included: true},
             {pattern: `${paths.tmp.karma}/test/unit/setup.js`, included: true},
 
             // files loaded via module imports

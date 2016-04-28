@@ -1,6 +1,7 @@
 const dirs = {
     build: `build`,
     buildConfig: `build/config`,
+    buildHelpers: `build/helpers`,
     buildLib: `build/lib`,
     buildTasks: `build/tasks`,
     coverage: `coverage`,
@@ -138,6 +139,11 @@ exports.make = {
 };
 
 exports.release = {
+    helpers: [
+        `${dirs.buildHelpers}/decorate.js`,
+        `${dirs.buildHelpers}/extends.js`,
+        `${dirs.buildHelpers}/metadata.js`,
+    ],
     src: `${dirs.src}`,
 };
 

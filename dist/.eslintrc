@@ -32,6 +32,7 @@
         "no-nested-ternary": ["off"],
         "no-new-func": ["off"],
         "no-param-reassign": ["off"],
+        "no-proto": ["off"],
         "no-restricted-syntax": ["off"],
         "no-sequences": ["off"],
         "no-shadow": ["off"],

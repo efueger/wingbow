@@ -4,7 +4,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "module": "amd",
-    "noEmitHelpers": false,
+    "noEmitHelpers": true,
     "removeComments": false,
     "sourceMap": false,
     "suppressImplicitAnyIndexErrors": true,

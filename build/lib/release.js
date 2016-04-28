@@ -7,8 +7,8 @@ const tsc = require(`typescript`);
 const getSha = require(`./get-sha`);
 const pkg = require(`../../package.json`);
 const paths = require(`../config/paths`);
-const header = require(`../includes/header`);
 const footer = require(`../includes/footer`);
+const header = require(`../includes/header`);
 
 const sourceRoot = path.join(__dirname, `..`, `..`, paths.release.src);
 
@@ -48,6 +48,9 @@ function release(filesRoot, filesDest, filesGlob, options) {
                 optimize: `none`,
                 prefixMode: `camelCase`,
             }))
+            .pipe(gulp.src(paths.release.helpers, {passthrough: true}))
+            .pipe($.order([...paths.release.helpers, `*`]))
+            .pipe($.concat(`wingbow.js`))
             .pipe($.header(header, stamp))
             .pipe($.footer(footer, stamp))
             .pipe($.size({
