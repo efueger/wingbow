@@ -35,6 +35,7 @@ before_install:
 
 install:
   - npm install
+  - cp .ci/reporter.js node_modules/karma/lib/reporter.js
   - du -sh node_modules || true
 
 before_script:
