@@ -1,6 +1,5 @@
 " Directories
 
-set wildignore+=*/.ci/**
 set wildignore+=*/.karma/**
 set wildignore+=*/.protractor/**
 set wildignore+=*/coverage/**
@@ -8,4 +7,4 @@ set wildignore+=*/dist/**
 set wildignore+=*/docs/**
 
 " Nerdtree specific ignore
-let NERDTreeIgnore += ['^.ci$', '^.karma$', '^.protractor$', '^coverage$', '^dist$', '^docs$']
+let NERDTreeIgnore += ['^.karma$', '^.protractor$', '^coverage$', '^dist$', '^docs$']

@@ -19,7 +19,7 @@ module.exports = function karmaConf(karma) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            `Chrome`,
+            `ChromeCanary`,
         ],
 
         // the maximum bootup time for a browser
@@ -34,9 +34,11 @@ module.exports = function karmaConf(karma) {
 
         // configure custom launchers
         customLaunchers: {
-            ChromeCI: {
-                base: `Chrome`,
-                flags: [`--no-sandbox`],
+            ChromeCanaryCI: {
+                base: `ChromeCanary`,
+                flags: [
+                    `--no-sandbox`,
+                ],
             },
         },
 
@@ -128,7 +130,7 @@ module.exports = function karmaConf(karma) {
     };
 
     if (isCI) {
-        config.browsers = [`ChromeCI`];
+        config.browsers = [`ChromeCanaryCI`];
     }
 
     karma.set(config);

@@ -4,6 +4,7 @@
 .sass-cache/**
 .tsc/**
 bower_components/**
+browser/**
 coverage/**
 docs/**
 jspm_packages/**

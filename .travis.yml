@@ -24,7 +24,9 @@ env:
     - CC: /usr/bin/gcc-4.8
     - CXX: /usr/bin/g++-4.8
     - DISPLAY: ":99.0"
-    - CHROME_BIN=chromium-browser
+    - CHROME_URL=https://storage.googleapis.com/chromium-browser-snapshots/Linux_x64
+    - CHROME_REV=$(curl -s ${CHROME_URL}/LAST_CHANGE)
+    - CHROME_CANARY_BIN=$PWD/browser/chrome-linux/chrome
 
 before_install:
   - $CXX --version
@@ -35,10 +37,12 @@ before_install:
 
 install:
   - npm install
-  - cp .ci/reporter.js node_modules/karma/lib/reporter.js
+  - cp build/ci/reporter.js node_modules/karma/lib/reporter.js
   - du -sh node_modules || true
 
 before_script:
+  - curl ${CHROME_URL}/${CHROME_REV}/chrome-linux.zip --create-dirs -o browser/chrome-linux.zip
+  - unzip browser/chrome-linux.zip -d browser
   - sh -e /etc/init.d/xvfb start
   - sleep 5
 

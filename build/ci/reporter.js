@@ -1,3 +1,4 @@
+/* eslint-disable */
 var util = require('util')
 var log = require('./logger').create('reporter')
 var MultiReporter = require('./reporters/multi')
