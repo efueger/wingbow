@@ -44,7 +44,7 @@
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-amdcleaner": "^1.0.1",
     "gulp-concat": "^2.6.0",
-    "gulp-connect": "^3.2.2",
+    "gulp-connect": "^4.0.0",
     "gulp-eslint": "^2.0.0",
     "gulp-filter": "^4.0.0",
     "gulp-footer": "^1.0.5",
