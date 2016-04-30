@@ -78,7 +78,7 @@
     "protractor-cucumber-framework": "^0.5.0",
     "remap-istanbul": "0.6.3",
     "require-dir": "^0.3.0",
-    "systemjs": "^0.19.26",
+    "systemjs": "^0.19.27",
     "tslint": "^3.8.1",
     "typedoc": "^0.3.12",
     "typescript": "^1.9.0-dev.20160427",
