@@ -93,10 +93,10 @@ describe(`extend`, () => {
 
         describe(`when a "name" is not supplied`, () => {
 
-            it(`should use the default Surrogate name`, () => {
+            it(`should use the default "Child" name`, () => {
                 expect(() => {
                     const User = ParentConstructor.extend();
-                    expect([``, `Surrogate`].indexOf(User.name)).not.toBe(-1);
+                    expect(User.name).toBe(`Child`);
                 }).not.toThrow();
             });
         });

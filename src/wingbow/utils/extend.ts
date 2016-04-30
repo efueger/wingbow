@@ -39,7 +39,7 @@ export function Extend (Target) {
             if (hasOwn(rawProtoProps, `$constructor`)) {
                 Child = rawProtoProps.$constructor(Target);
             } else {
-                Child = function () { return Target.apply(this, arguments); };
+                Child = function Child() { return Target.apply(this, arguments); };
             }
         }
 
