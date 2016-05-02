@@ -1,8 +1,8 @@
-import { rnd } from '../utils/rnd';
-import { Jsonable } from '../utils/types';
-import { toNumberOrNaN } from '../utils/to';
-import { IllegalOperatorError } from '../collection/errors';
-import { isArrayLike, isFunction, isNumber } from '../utils/is';
+import { rnd } from './rnd';
+import { Jsonable } from './types';
+import { toNumberOrNaN } from './to';
+import { IllegalOperatorError } from './errors';
+import { isArrayLike, isFunction, isNumber } from './is';
 import { ExtendableArray, ExtendableArrayInstance } from './extendable-array';
 
 export interface CollectionInstance<T> extends ExtendableArrayInstance<T> {

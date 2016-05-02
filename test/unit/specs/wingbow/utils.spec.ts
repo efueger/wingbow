@@ -2,6 +2,10 @@ import * as utils from 'src/wingbow/utils';
 
 describe(`utils`, () => {
 
+    it(`should expose "errors"`, () => {
+        expect(utils.errors).not.toBe(undefined);
+    });
+
     it(`should expose "is"`, () => {
         expect(utils.is).not.toBe(undefined);
     });
@@ -12,6 +16,10 @@ describe(`utils`, () => {
 
     it(`should expose "to"`, () => {
         expect(utils.to).not.toBe(undefined);
+    });
+
+    it(`should expose "Collection"`, () => {
+        expect(utils.Collection).not.toBe(undefined);
     });
 
     it(`should expose "hasOwn"`, () => {

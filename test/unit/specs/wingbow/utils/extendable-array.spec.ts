@@ -1,5 +1,5 @@
 import { isString } from 'src/wingbow/utils/is';
-import { ExtendableArray } from 'src/wingbow/collection/extendable-array';
+import { ExtendableArray } from 'src/wingbow/utils/extendable-array';
 
 let extArr = new ExtendableArray<string>();
 

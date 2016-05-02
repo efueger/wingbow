@@ -1,6 +1,6 @@
 import { isString } from 'src/wingbow/utils/is';
-import { IllegalOperatorError } from 'src/wingbow/collection/errors';
-import { Collection } from 'src/wingbow/collection/collection';
+import { IllegalOperatorError } from 'src/wingbow/utils/errors';
+import { Collection } from 'src/wingbow/utils/collection';
 
 interface TestCollection {
     id :number;

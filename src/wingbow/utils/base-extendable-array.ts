@@ -1,5 +1,5 @@
-import { hasOwn } from '../utils/has-own';
-import { MAX_ARRAY_LENGTH } from '../utils/max-array-length';
+import { hasOwn } from './has-own';
+import { MAX_ARRAY_LENGTH } from './max-array-length';
 
 export function ToUint32(value :any) :number {
     return value >>> 0;

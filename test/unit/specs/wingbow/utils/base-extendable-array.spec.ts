@@ -1,6 +1,6 @@
 import { isString } from 'src/wingbow/utils/is';
 import { MAX_ARRAY_LENGTH } from 'src/wingbow/utils/max-array-length';
-import { BaseExtendableArray } from 'src/wingbow/collection/base-extendable-array';
+import { BaseExtendableArray } from 'src/wingbow/utils/base-extendable-array';
 
 class CustomExtendableArray<T> extends BaseExtendableArray<T> {}
 
