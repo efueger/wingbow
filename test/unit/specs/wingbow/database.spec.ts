@@ -14,6 +14,10 @@ describe(`database`, () => {
         expect(database.Model).not.toBe(undefined);
     });
 
+    it(`should expose "ModelCollection"`, () => {
+        expect(database.ModelCollection).not.toBe(undefined);
+    });
+
 });
 
 /* vim: set cc=0 : */
