@@ -1,3 +1,4 @@
+import { rnd } from '../utils/rnd';
 import { Jsonable } from '../utils/types';
 import { toNumberOrNaN } from '../utils/to';
 import { IllegalOperatorError } from '../collection/errors';
@@ -27,6 +28,10 @@ export class Collection<T> extends ExtendableArray<T> {
         const Ctor = this.constructor[Symbol.species];
         const result = new Ctor(...arr);
         return result;
+    }
+
+    public clone() {
+        return this.slice();
     }
 
     public compact() {
@@ -78,6 +83,37 @@ export class Collection<T> extends ExtendableArray<T> {
                 arr.push(value);
             }
         }, thisArg);
+        const Ctor = this.constructor[Symbol.species];
+        const result = new Ctor(...arr);
+        return result;
+    }
+
+    public sample() :T {
+        const index = rnd(0, this.length - 1);
+        return this[index];
+    }
+
+    public shuffle() {
+        let arr = this.toArray();
+        let remaining = arr.length;
+        while (--remaining) {
+            let index = rnd(0, remaining);
+            let temp = arr[remaining];
+            arr[remaining] = arr[index];
+            arr[index] = temp;
+        }
+        const Ctor = this.constructor[Symbol.species];
+        const result = new Ctor(...arr);
+        return result;
+    }
+
+    public unique() {
+        const arr = [];
+        this.forEach(value => {
+            if (!arr.includes(value)) {
+                arr.push(value);
+            }
+        });
         const Ctor = this.constructor[Symbol.species];
         const result = new Ctor(...arr);
         return result;

@@ -80,6 +80,25 @@ describe(`Collection`, () => {
 
     });
 
+    describe(`clone`, () => {
+
+        it(`should return the same items that were passed in`, () => {
+            expect(col.clone() instanceof Collection).toBe(true);
+            expect(col.clone()).not.toBe(col);
+            expect(col.clone()).toEqual(new Collection<TestCollection>(
+                {id: 0, value: `foo`},
+                {id: 1, value: 0},
+                {id: 2, value: 1},
+                {id: 3, value: null},
+                {id: 4, value: undefined},
+                {id: 5, value: true},
+                {id: 6, value: false},
+                {id: 7, value: `bar`}
+            ));
+        });
+
+    });
+
     describe(`compact`, () => {
 
         it(`should remove all falsy values from the Collection`, () => {
@@ -149,6 +168,61 @@ describe(`Collection`, () => {
                 {id: 5, value: true},
                 {id: 7, value: `bar`}
             ));
+        });
+
+    });
+
+    describe(`sample`, () => {
+
+        it(`should return an item from within the Collection`, () => {
+            const s = col.sample();
+            expect(col.includes(s)).toBe(true);
+        });
+
+    });
+
+    describe(`shuffle`, () => {
+
+        it(`should return a new shuffled Collection`, () => {
+            expect(col.shuffle() instanceof Collection).toBe(true);
+            expect(col.shuffle()).not.toBe(col);
+        });
+
+        xit(`should be sufficiently random`, () => {
+            const nums = new Collection<number>(1, 2, 3, 4, 5);
+            const avg = Math.floor(nums.reduce((p, c) => p + c, 0) / nums.length);
+            const iterations = 10000;
+            const arr = new Array(iterations).fill(null).map(v => nums.shuffle());
+            const sums = arr.reduce((p, c) => {
+                return p.map((v, i) => {
+                    return v + c[i];
+                });
+            }, new Array(nums.length).fill(0));
+            sums.forEach(total => {
+                const result = Math.round(total / iterations);
+                expect(result).toBe(avg);
+            });
+        });
+
+        it(`should only contain the shuffled items`, () => {
+            const shuffled = col.shuffle();
+            expect(shuffled.length).toBe(col.length);
+            shuffled.forEach((v, i) => {
+                const index = col.findIndex(c => v);
+                expect(index).not.toBe(-1);
+                col = col.remove(index);
+            });
+            expect(col.length).toBe(0);
+        });
+
+    });
+
+    describe(`unique`, () => {
+
+        it(`should return a Collection of unique items`, () => {
+            col = new Collection<any>(2, 1, NaN, 2, `3`, 4, null, 3, NaN, 1, 5);
+            expect(col.unique() instanceof Collection).toBe(true);
+            expect(col.unique()).toEqual(new Collection<any>(2, 1, NaN, `3`, 4, null, 3, 5));
         });
 
     });
