@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - '5'
+  - '6'
 
 os:
   - linux
@@ -30,10 +30,6 @@ env:
 
 before_install:
   - $CXX --version
-  - npm install --global npm
-  - npm --version
-  - npm install --global gulp-cli
-  - gulp --version
 
 install:
   - npm install
@@ -47,7 +43,7 @@ before_script:
   - sleep 5
 
 script:
-  - gulp ci
+  - npm run gulp ci
 
 after_success:
   - npm run coveralls
