@@ -20,7 +20,7 @@ export class ExtendableArray<T> extends BaseExtendableArray<T> {
 
     constructor(...args :Array<T>) {
         super(...args);
-        this[Symbol.toStringTag] = this.constructor.name;
+        this[Symbol.toStringTag] = this.constructor[Symbol.species].name;
     }
 
     public concat(...args :Array<(T | Array<T>)>) {
@@ -31,19 +31,22 @@ export class ExtendableArray<T> extends BaseExtendableArray<T> {
     }
 
     public filter(callbackfn :(value :T, index :number, obj :this) => boolean, thisArg? :any) {
-        const result = super.filter(callbackfn, thisArg);
+        const arr = this.toArray();
+        const result = arr.filter(callbackfn, thisArg);
         const Ctor = this.constructor[Symbol.species];
         return new Ctor(...result);
     }
 
     public map<U>(callbackfn :(value :T, index :number, obj :this) => U, thisArg? :any) {
-        const result = super.map(callbackfn, thisArg);
+        const arr = this.toArray();
+        const result = arr.map(callbackfn, thisArg);
         const Ctor = this.constructor[Symbol.species];
         return new Ctor(...result);
     }
 
     public slice(start? :number, end? :number) {
-        const result = super.slice(start, end);
+        const arr = this.toArray();
+        const result = arr.slice(start, end);
         const Ctor = this.constructor[Symbol.species];
         return new Ctor(...result);
     }
