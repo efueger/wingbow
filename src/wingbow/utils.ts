@@ -5,3 +5,4 @@ export { is, str, to };
 export { hasOwn } from './utils/has-own';
 export { Extend } from './utils/extend';
 export { Trait } from './utils/trait';
+export { rnd } from './utils/rnd';

@@ -26,6 +26,10 @@ describe(`utils`, () => {
         expect(utils.Trait).not.toBe(undefined);
     });
 
+    it(`should expose "rnd"`, () => {
+        expect(utils.rnd).not.toBe(undefined);
+    });
+
 });
 
 /* vim: set cc=0 : */
