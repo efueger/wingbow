@@ -1,4 +1,9 @@
-import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from 'src/wingbow/database/errors';
+import {
+    IllegalCastTypeError,
+    IllegalStoreTypeError,
+    MassAssignmentError,
+    NotFillableError,
+} from 'src/wingbow/database/errors';
 
 describe(`errors`, () => {
 
@@ -14,8 +19,26 @@ describe(`errors`, () => {
         });
 
         it(`should pass along the message`, () => {
-            const err = new IllegalCastTypeError(`message`);
-            expect(err.message).toBe(`message`);
+            const err = new IllegalCastTypeError(`message: IllegalCastTypeError`);
+            expect(err.message).toBe(`message: IllegalCastTypeError`);
+        });
+
+    });
+
+    describe(`IllegalStoreTypeError`, () => {
+
+        it(`should be exposed`, () => {
+            expect(IllegalStoreTypeError).not.toBe(undefined);
+        });
+
+        it(`should have a name`, () => {
+            const err = new IllegalStoreTypeError();
+            expect(err.name).toBe(`IllegalStoreTypeError`);
+        });
+
+        it(`should pass along the message`, () => {
+            const err = new IllegalStoreTypeError(`message: IllegalStoreTypeError`);
+            expect(err.message).toBe(`message: IllegalStoreTypeError`);
         });
 
     });
@@ -32,8 +55,8 @@ describe(`errors`, () => {
         });
 
         it(`should pass along the message`, () => {
-            const err = new MassAssignmentError(`message`);
-            expect(err.message).toBe(`message`);
+            const err = new MassAssignmentError(`message: MassAssignmentError`);
+            expect(err.message).toBe(`message: MassAssignmentError`);
         });
 
     });
@@ -49,8 +72,8 @@ describe(`errors`, () => {
         });
 
         it(`should pass along the message`, () => {
-            const err = new NotFillableError(`message`);
-            expect(err.message).toBe(`message`);
+            const err = new NotFillableError(`message: NotFillableError`);
+            expect(err.message).toBe(`message: NotFillableError`);
         });
 
     });

@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { Model } from 'src/wingbow/database/model';
-import { _setAttributesStore } from 'src/wingbow/database/store';
+import { _mockStore } from 'src/wingbow/database/store';
 import { Jsonable, JsonableObject } from 'src/wingbow/utils/types';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from 'src/wingbow/database/errors';
 
@@ -29,7 +29,7 @@ describe(`Model`, () => {
 
     beforeEach(() => {
         mockAttributesStore = new Map();
-        _setAttributesStore(mockAttributesStore);
+        _mockStore(`attributes`, mockAttributesStore);
         attributes = {a: 1, b: 2, c: 3};
         model = new MockModel(attributes);
     });
@@ -232,7 +232,7 @@ describe(`Model`, () => {
 
         it(`should exclude stored prototypal proterties`, () => {
             const map = new Map();
-            _setAttributesStore(map);
+            _mockStore(`attributes`, map);
             let that = null;
             class MockModel extends Model {
                 constructor(attributes :JsonableObject) {

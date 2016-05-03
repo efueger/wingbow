@@ -1,50 +1,64 @@
+import { IllegalStoreTypeError } from './errors';
 import { Jsonable, JsonableObject } from '../utils/types';
 
 let attributesStore = new Map<any, any>();
 let originalsStore = new Map<any, any>();
 
-function getStoreInstance<K>(store :Map<K, JsonableObject>, instance :K) :JsonableObject {
+function getStore<K, V extends JsonableObject>(name :string) :Map<K, V> {
+    switch (name) {
+        case `attributes`:
+            return attributesStore;
+        case `originals`:
+            return originalsStore;
+        default:
+            throw new IllegalStoreTypeError();
+    }
+}
+
+function getStoreInstance<K>(instance :K, name :string) :JsonableObject {
+    const store = getStore(name);
     if (!store.has(instance)) {
         store.set(instance, {} as JsonableObject);
     }
     return store.get(instance);
 }
 
-function setStoreInstance<K, V extends JsonableObject>(store :Map<K, V>, instance :K, data :V) :void {
-    store.set(instance, data);
+function setStoreInstance<K, V extends JsonableObject>(instance :K, name :string, newData :V) :void {
+    const store = getStore(name);
+    store.set(instance, newData);
 }
 
-export function _setAttributesStore<K, V extends JsonableObject>(store :Map<K, V>) :void {
-    attributesStore = store;
+export function _mockStore<K, V extends JsonableObject>(name :string, store :Map<K, V>) {
+    switch (name) {
+        case `attributes`:
+            attributesStore = store;
+            break;
+        case `originals`:
+            originalsStore = store;
+            break;
+        default:
+            throw new IllegalStoreTypeError();
+    }
 }
 
-export function _setOriginalsStore<K, V extends JsonableObject>(store :Map<K, V>) :void {
-    originalsStore = store;
+export function getRaw<K>(instance :K, name :string, key :string) :Jsonable {
+    const existingData = getRaws<K>(instance, name);
+    return existingData[key];
 }
 
-export function getRawAttribute<K>(instance :K, key :string) :Jsonable {
-    const attributes = getRawAttributes<K>(instance);
-    return attributes[key];
+export function getRaws<K>(instance :K, name :string) :JsonableObject {
+    return getStoreInstance<K>(instance, name);
 }
 
-export function getRawAttributes<K>(instance :K) :JsonableObject {
-    return getStoreInstance<K>(attributesStore, instance);
+export function setRaw<K, V extends JsonableObject>(instance :K, name :string, key :string, value :Jsonable) :void {
+    const newData = {
+        [key]: value,
+    };
+    setRaws<K, JsonableObject>(instance, name, newData);
 }
 
-export function getRawOriginals<K>(instance :K) :JsonableObject {
-    return getStoreInstance<K>(originalsStore, instance);
-}
-
-export function setRawAttribute<K, V extends JsonableObject>(instance :K, key :string, value :Jsonable) :void {
-    const attributes = getRawAttributes<K>(instance);
-    attributes[key] = value;
-    setRawAttributes<K, JsonableObject>(instance, attributes);
-}
-
-export function setRawAttributes<K, V extends JsonableObject>(instance :K, data :V) :void {
-    setStoreInstance<K, JsonableObject>(attributesStore, instance, data);
-}
-
-export function setRawOriginals<K, V extends JsonableObject>(instance :K, data :V) :void {
-    setStoreInstance<K, JsonableObject>(originalsStore, instance, data);
+export function setRaws<K, V extends JsonableObject>(instance :K, name :string, newData :V) :void {
+    const existingData = getRaws<K>(instance, name);
+    const updatedData = Object.assign({}, existingData, newData);
+    setStoreInstance<K, JsonableObject>(instance, name, updatedData);
 }

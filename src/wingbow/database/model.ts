@@ -3,12 +3,12 @@ import * as moment from 'moment';
 import { Trait } from '../utils/trait';
 import { Extend } from '../utils/extend';
 import { hasOwn } from '../utils/has-own';
+import { getRaw, getRaws, setRaw, setRaws } from './store';
 import { intersectWithObj, intersectWithoutObj } from '../utils/intersect-obj';
 import { isDate, isFunction, isNumber, isString } from '../utils/is';
 import { Jsonable, JsonableObject, JsonSerializable } from '../utils/types';
 import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../utils/str';
-import { IllegalCastTypeError, MassAssignmentError, NotFillableError  } from './errors';
-import { getRawAttribute, getRawAttributes, setRawAttribute, setRawOriginals } from './store';
+import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from './errors';
 import { toArray, toBoolean, toJSON, toNumber, toObject, toString, toTimestamp } from '../utils/to';
 
 @Trait([
@@ -125,7 +125,7 @@ export abstract class Model {
     }
 
     public getAttributes() :any {
-        const rawAttributes = getRawAttributes(this);
+        const rawAttributes = getRaws(this, `attributes`);
         const attributes = {};
         for (const key in rawAttributes) {
             if (hasOwn(rawAttributes, key)) {
@@ -136,7 +136,7 @@ export abstract class Model {
     }
 
     protected getAttributeValue(key :string) :any {
-        const value = getRawAttribute(this, key);
+        const value = getRaw(this, `attributes`, key);
         if (this.hasGetMutator(key)) {
             return this.callGetMutator(key, value);
         }
@@ -195,7 +195,7 @@ export abstract class Model {
     }
 
     protected getJsonableAttributes() :JsonableObject {
-        const attributes = getRawAttributes(this);
+        const attributes = getRaws(this, `attributes`);
         const jsonable = this.getJsonableItems(attributes);
         return jsonable;
     }
@@ -225,7 +225,7 @@ export abstract class Model {
     }
 
     public hasAttribute(key :string) :boolean {
-        const attributes = getRawAttributes(this);
+        const attributes = getRaws(this, `attributes`);
         return hasOwn(attributes, key);
     }
 
@@ -307,12 +307,12 @@ export abstract class Model {
         } else if (this.getDates().includes(key) || this.isDateCastable(key)) {
             value = this.fromDate(value);
         }
-        setRawAttribute(this, key, value);
+        setRaw(this, `attributes`, key, value);
     }
 
     public syncOriginal() :void {
-        const attributes = getRawAttributes(this);
-        setRawOriginals(this, attributes);
+        const attributes = getRaws(this, `attributes`);
+        setRaws(this, `originals`, attributes);
     }
 
     // public table() :string {

@@ -1,122 +1,173 @@
 import {
-    _setAttributesStore,
-    _setOriginalsStore,
-    getRawAttribute,
-    getRawAttributes,
-    getRawOriginals,
-    setRawAttribute,
-    setRawAttributes,
-    setRawOriginals,
+    _mockStore,
+    getRaw,
+    getRaws,
+    setRaw,
+    setRaws,
 } from 'src/wingbow/database/store';
+import { IllegalStoreTypeError } from 'src/wingbow/database/errors';
 
-const mockInstance = {};
-let mockAttributes = null;
-let mockAttributesStore = null;
-let mockOriginals = null;
-let mockOriginalsStore = null;
+const storeKey = {};
+const storeNames = [`attributes`, `originals`];
+let localData :any = {};
+let localStores :any = {};
+
+storeNames.forEach(storeName => {
+    localStores[storeName] = new Map();
+});
 
 describe(`store`, () => {
 
     beforeEach(() => {
-        mockAttributes = {};
-        mockOriginals = {};
-        mockAttributesStore = new Map();
-        mockOriginalsStore = new Map();
-        _setAttributesStore(mockAttributesStore);
-        _setOriginalsStore(mockOriginalsStore);
+        localData = {};
+        localStores = {};
+        storeNames.forEach(storeName => {
+            const store = new Map();
+            _mockStore(storeName, store);
+            localStores[storeName] = store;
+        });
     });
 
     afterEach(() => {
-        expect(Object.keys(mockInstance).length).toBe(0);
+        expect(Object.keys(storeKey).length).toBe(0);
     });
 
-    describe(`getRawAttribute`, () => {
+    describe(`_mockStore`, () => {
 
-        it(`should get an attribute on an instance`, () => {
-            mockAttributes.one = `One`;
-            mockAttributes.two = `Two`;
-            mockAttributesStore.set(mockInstance, mockAttributes);
-            expect(getRawAttribute(mockInstance, `one`)).toBe(`One`);
-            expect(getRawAttribute(mockInstance, `two`)).toBe(`Two`);
+        it(`should throw if data is attempted to be retrieved from a store that does not exist`, () => {
+            const store = new Map();
+            expect(() => {
+                _mockStore(`STORE_NAME_NOT_DEFINED`, store);
+            }).toThrowError(IllegalStoreTypeError);
         });
 
-    });
-
-    describe(`getRawAttributes`, () => {
-
-        it(`should return an empty Object when no attributes have been stored`, () => {
-            expect(getRawAttributes(mockInstance)).toEqual({});
-        });
-
-        it(`should return the stored attributes`, () => {
-            mockAttributes.one = `One`;
-            mockAttributes.two = `Two`;
-            mockAttributesStore.set(mockInstance, mockAttributes);
-            expect(getRawAttributes(mockInstance)).toEqual({
-                one: `One`,
-                two: `Two`,
+        it(`should override the existing store with the one passed in`, () => {
+            storeNames.forEach(storeName => {
+                setRaw(storeKey, storeName, `aaa`, `AAA`);
+                expect(getRaw(storeKey, storeName, `aaa`)).toBe(`AAA`);
+                const store = new Map();
+                store.set(storeKey, {aaa: `MOCKED_AAA`});
+                _mockStore(storeName, store);
+                expect(getRaw(storeKey, storeName, `aaa`)).toBe(`MOCKED_AAA`);
             });
         });
 
     });
 
-    describe(`getRawOriginals`, () => {
+    describe(`getRaw`, () => {
 
-        it(`should return an empty Object when no originals have been stored`, () => {
-            expect(getRawOriginals(mockInstance)).toEqual({});
+        it(`should throw if data is attempted to be retrieved from a store that does not exist`, () => {
+            storeNames.forEach(storeName => {
+                expect(() => {
+                    getRaw(storeKey, `STORE_NAME_NOT_DEFINED`, `aaa`);
+                }).toThrowError(IllegalStoreTypeError);
+            });
         });
 
-        it(`should return the stored originals`, () => {
-            mockOriginals.one = `One`;
-            mockOriginals.two = `Two`;
-            mockOriginalsStore.set(mockInstance, mockOriginals);
-            expect(getRawOriginals(mockInstance)).toEqual({
-                one: `One`,
-                two: `Two`,
+        it(`should get a property associated with an instance`, () => {
+            storeNames.forEach(storeName => {
+                localData = {};
+                localData = {
+                    aaa: `AAA`,
+                    bbb: `BBB`,
+                };
+                localStores[storeName].set(storeKey, localData);
+                expect(getRaw(storeKey, storeName, `aaa`)).toBe(`AAA`);
+                expect(getRaw(storeKey, storeName, `bbb`)).toBe(`BBB`);
+            });
+        });
+
+    });
+
+    describe(`getRaws`, () => {
+
+        it(`should throw if data is attempted to be retrieved from a store that does not exist`, () => {
+            storeNames.forEach(storeName => {
+                expect(() => {
+                    getRaws(storeKey, `STORE_NAME_NOT_DEFINED`);
+                }).toThrowError(IllegalStoreTypeError);
+            });
+        });
+
+        it(`should return an empty Object when no data has been stored`, () => {
+            storeNames.forEach(storeName => {
+                expect(getRaws(storeKey, storeName)).toEqual({});
+            });
+        });
+
+        it(`should return an Object represeting the data that has been associated with an instance`, () => {
+            storeNames.forEach(storeName => {
+                localData = {};
+                localData = {
+                    aaa: `AAA`,
+                    bbb: `BBB`,
+                };
+                localStores[storeName].set(storeKey, localData);
+                expect(getRaws(storeKey, storeName)).toEqual({
+                    aaa: `AAA`,
+                    bbb: `BBB`,
+                });
             });
         });
 
     });
 
 
+    describe(`setRaw`, () => {
 
+        it(`should throw if data is attempted to be stored on a store that does not exist`, () => {
+            storeNames.forEach(storeName => {
+                expect(() => {
+                    setRaw(storeKey, `STORE_NAME_NOT_DEFINED`, `aaa`, `AAA`);
+                }).toThrowError(IllegalStoreTypeError);
+            });
+        });
 
-    describe(`setRawAttribute`, () => {
-
-        it(`should should be able to set a single attribute`, () => {
-            setRawAttribute(mockInstance, `one`, `ONE`);
-            setRawAttribute(mockInstance, `two`, `TWO`);
-            expect(mockAttributesStore.get(mockInstance)).toEqual({
-                one: `ONE`,
-                two: `TWO`,
+        it(`should be able to set a single property associated with an instance`, () => {
+            storeNames.forEach(storeName => {
+                setRaw(storeKey, storeName, `aaa`, `AAA`);
+                setRaw(storeKey, storeName, `bbb`, `BBB`);
+                expect(localStores[storeName].get(storeKey)).toEqual({
+                    aaa: `AAA`,
+                    bbb: `BBB`,
+                });
             });
         });
 
     });
 
-    describe(`setRawAttributes`, () => {
+    describe(`setRaws`, () => {
 
-        it(`should should be able to set attributes`, () => {
-            mockAttributes.one = `One`;
-            mockAttributes.two = `Two`;
-            setRawAttributes(mockInstance, mockAttributes);
-            expect(mockAttributesStore.get(mockInstance)).toEqual({
-                one: `One`,
-                two: `Two`,
+        it(`should throw if data is attempted to be stored on a store that does not exist`, () => {
+            storeNames.forEach(storeName => {
+                expect(() => {
+                    setRaws(storeKey, `STORE_NAME_NOT_DEFINED`, localData);
+                }).toThrowError(IllegalStoreTypeError);
             });
         });
 
-    });
-
-    describe(`setRawOriginals`, () => {
-
-        it(`should should be able to set Originals`, () => {
-            mockOriginals.one = `One`;
-            mockOriginals.two = `Two`;
-            setRawOriginals(mockInstance, mockOriginals);
-            expect(mockOriginalsStore.get(mockInstance)).toEqual({
-                one: `One`,
-                two: `Two`,
+        it(`should merge all data associated with an instance`, () => {
+            storeNames.forEach(storeName => {
+                localData = {
+                    aaa: `AAA`,
+                    bbb: `BBB`,
+                };
+                setRaws(storeKey, storeName, localData);
+                expect(localStores[storeName].get(storeKey)).toEqual({
+                    aaa: `AAA`,
+                    bbb: `BBB`,
+                });
+                localData = {
+                    ccc: `CCC`,
+                    ddd: `DDD`,
+                };
+                setRaws(storeKey, storeName, localData);
+                expect(localStores[storeName].get(storeKey)).toEqual({
+                    aaa: `AAA`,
+                    bbb: `BBB`,
+                    ccc: `CCC`,
+                    ddd: `DDD`,
+                });
             });
         });
 
