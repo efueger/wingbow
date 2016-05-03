@@ -115,7 +115,7 @@ describe(`Model`, () => {
         });
 
         it(`should throw when getting the attributes if the cast type is invalid`, () => {
-            const AttributeExample = function() { this.localProp = false; };
+            const AttributeExample = function () { this.localProp = false; };
             AttributeExample.prototype.protoProp = true;
             class MockModel extends Model {
                 public casts() { return {a: AttributeExample}; }
@@ -152,7 +152,7 @@ describe(`Model`, () => {
     describe(`fill`, () => {
 
         it(`should only fill non prototypal properties`, () => {
-            const ProtoExample = function() { this.localProp = false; };
+            const ProtoExample = function () { this.localProp = false; };
             ProtoExample.prototype.protoProp = true;
             class MockModel extends Model {
                 public fillable() { return [`localProp`]; }
@@ -358,7 +358,7 @@ describe(`Model`, () => {
         });
 
         it(`should not include prototypal properties`, () => {
-            const CastExample = function() { this.localProp = `string`; };
+            const CastExample = function () { this.localProp = `string`; };
             CastExample.prototype.protoProp = `string`;
             class MockModel extends Model {
                 public casts() { return new CastExample(); }

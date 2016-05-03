@@ -15,11 +15,11 @@ export interface BaseExtendableArray<T> {
     prototype :BaseExtendableArrayInstance<T>;
 }
 
-export const BaseExtendableArray :BaseExtendableArray<any> = function(...args) {
+export const BaseExtendableArray :BaseExtendableArray<any> = function (...args) {
     this.push.apply(this, args);
     let _length = 0;
     Object.defineProperty(this, 'length', {
-        get: function() :number {
+        get: function () :number {
             let result = -1;
             for (let key in this) {
                 if (hasOwn(this, key)) {
@@ -41,13 +41,14 @@ export const BaseExtendableArray :BaseExtendableArray<any> = function(...args) {
             }
             return Math.max(_length, result + 1);
         },
-        set: function(value :any) :void {
-            const index = ToUint32(value);
+        set: function (value :any) :void {
+            let index = ToUint32(value);
             if (index !== Number(value)) {
                 throw new RangeError();
             }
-            for (let i = index, len = this.length; i < len; i++) {
-                delete this[i];
+            const len = this.length;
+            while (index < len) {
+                delete this[index++];
             }
             _length = index;
         },
