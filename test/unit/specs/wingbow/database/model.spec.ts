@@ -508,12 +508,16 @@ describe(`Model`, () => {
 
     describe(`toJSON`, () => {
 
+        it(`should be pretty by default`, () => {
+            expect(model.toJSON()).toBe(model.toJSON({pretty: true}));
+        });
+
         it(`should convert the models attributes to a JSON string`, () => {
             class MockModel extends Model {
                 public fillable() { return [`a`, `b`, `c`]; }
             }
             const model = new MockModel(attributes);
-            expect(model.toJSON()).toBe(JSON.stringify({a: 1, b: 2, c: 3}));
+            expect(model.toJSON({pretty: false})).toBe(JSON.stringify({a: 1, b: 2, c: 3}));
         });
 
         it(`should not show hidden attributes`, () => {
@@ -522,7 +526,7 @@ describe(`Model`, () => {
                 public hidden() { return [`b`]; }
             }
             const model = new MockModel(attributes);
-            expect(model.toJSON()).toBe(JSON.stringify({a: 1, c: 3}));
+            expect(model.toJSON({pretty: false})).toBe(JSON.stringify({a: 1, c: 3}));
         });
 
         it(`should show visible attributes`, () => {
@@ -531,7 +535,7 @@ describe(`Model`, () => {
                 public visible() { return [`c`]; }
             }
             const model = new MockModel(attributes);
-            expect(model.toJSON()).toBe(JSON.stringify({c: 3}));
+            expect(model.toJSON({pretty: false})).toBe(JSON.stringify({c: 3}));
         });
 
     });

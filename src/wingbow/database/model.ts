@@ -3,9 +3,9 @@ import * as moment from 'moment';
 import { Trait } from '../utils/trait';
 import { Extend } from '../utils/extend';
 import { hasOwn } from '../utils/has-own';
-import { Jsonable, JsonableObject } from '../utils/types';
 import { intersectWithObj, intersectWithoutObj } from '../utils/intersect-obj';
 import { isDate, isFunction, isNumber, isString } from '../utils/is';
+import { Jsonable, JsonableObject, JsonSerializable } from '../utils/types';
 import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../utils/str';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError  } from './errors';
 import { getRawAttribute, getRawAttributes, setRawAttribute, setRawOriginals } from './store';
@@ -324,9 +324,10 @@ export abstract class Model {
         return true;
     }
 
-    public toJSON() :string {
+    public toJSON({ pretty = true } :JsonSerializable = {}) :string {
         const obj = this.toObject();
-        return JSON.stringify(obj);
+        const space = pretty ? 4 : 0;
+        return JSON.stringify(obj, null, space);
     }
 
     public toObject() :JsonableObject {
