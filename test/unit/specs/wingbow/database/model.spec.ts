@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Model } from 'src/wingbow/database/model';
 import { _mockStore } from 'src/wingbow/database/store';
+import { NotImplementedError } from 'src/wingbow/utils/errors';
 import { Jsonable, JsonableObject } from 'src/wingbow/utils/types';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from 'src/wingbow/database/errors';
 
@@ -18,7 +19,7 @@ class MockModel extends Model {
         return super.getAttributeValue(key);
     }
     public getRelationValue(key :string) :void {
-        super.getRelationValue(key);
+        // super.getRelationValue(key); // Don't throw NotImplementedError
     }
 }
 let attributes = {a: 1, b: 2, c: 3};
@@ -158,7 +159,14 @@ describe(`Model`, () => {
     describe(`casts`, () => {
     });
 
-    describe(`connection`, () => { // TODO
+    describe(`connection`, () => {
+
+        it(`should throw "NotImplementedError" whilst waiting for development`, () => {
+            expect(() => {
+                model.connection();
+            }).toThrowError(NotImplementedError);
+        });
+
     });
 
     describe(`createdAt`, () => {
@@ -441,6 +449,19 @@ describe(`Model`, () => {
             expect(model.getRelationValue(`d`)).toBe(undefined);
         });
 
+        it(`should throw "NotImplementedError" whilst waiting for development`, () => {
+            class MockModel extends Model {
+                public fillable() { return [`a`, `b`, `c`]; }
+                public /*unprotected*/ getRelationValue(key :string) :void {
+                    super.getRelationValue(key); // throw NotImplementedError
+                }
+            }
+            const model = new MockModel();
+            expect(() => {
+                model.getRelationValue(`d`);
+            }).toThrowError(NotImplementedError);
+        });
+
     });
 
     describe(`guarded`, () => {
@@ -511,7 +532,14 @@ describe(`Model`, () => {
     describe(`isWriteProtected`, () => {
     });
 
-    describe(`perPage`, () => { // TODO
+    describe(`perPage`, () => {
+
+        it(`should throw "NotImplementedError" whilst waiting for development`, () => {
+            expect(() => {
+                model.perPage();
+            }).toThrowError(NotImplementedError);
+        });
+
     });
 
     describe(`primaryKey`, () => {
@@ -526,7 +554,12 @@ describe(`Model`, () => {
     describe(`syncOriginal`, () => {
     });
 
-    describe(`table`, () => { // TODO
+    describe(`table`, () => {
+
+        it(`should return the pluralised form of the "snake_case"'d name of the "constructor"`, () => {
+            expect(model.table()).toBe(`mock_model`);
+        });
+
     });
 
     describe(`timestamps`, () => {

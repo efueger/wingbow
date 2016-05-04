@@ -4,3 +4,10 @@ export class IllegalOperatorError extends TypeError {
         super(message);
     }
 }
+
+export class NotImplementedError extends TypeError {
+    public name :string = `NotImplementedError`;
+    constructor(public message? :string) {
+        super(message);
+    }
+}

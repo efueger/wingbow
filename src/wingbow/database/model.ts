@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { Trait } from '../utils/trait';
 import { Extend } from '../utils/extend';
 import { hasOwn } from '../utils/has-own';
+import { NotImplementedError } from '../utils/errors';
 import { getRaw, getRaws, setRaw, setRaws } from './store';
 import { intersectWithObj, intersectWithoutObj } from '../utils/intersect-obj';
 import { Jsonable, JsonableObject, JsonSerializable } from '../utils/types';
@@ -89,9 +90,9 @@ export abstract class Model {
         return {};
     }
 
-    // public connection() :string {
-    //     return `memory`;
-    // }
+    public connection() :string {
+        throw new NotImplementedError();
+    }
 
     public createdAt() :string {
         return `created_at`;
@@ -230,7 +231,7 @@ export abstract class Model {
     }
 
     protected getRelationValue(key :string) :void {
-        // TODO
+        throw new NotImplementedError();
     }
 
     public guarded() :Array<string> {
@@ -301,9 +302,9 @@ export abstract class Model {
         return this.fillable().length === 0 && this.isFullyGuarded();
     }
 
-    // public perPage() :number {
-    //     return 20;
-    // }
+    public perPage() :number {
+        throw new NotImplementedError();
+    }
 
     public primaryKey() :string {
         return `id`;
@@ -328,10 +329,11 @@ export abstract class Model {
         setRaws(this, `originals`, attributes);
     }
 
-    // public table() :string {
-    //     const name = this.constructor[Symbol.species].name;
-    //     return toSnakeCase(name);
-    // }
+    public table() :string {
+        const name = this[Symbol.toStringTag];
+        const plural = name; // TODO add pluralification
+        return toSnakeCase(plural);
+    }
 
     public timestamps() :boolean {
         return true;
