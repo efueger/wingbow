@@ -55,11 +55,18 @@ describe(`Model`, () => {
 
     describe(`constructor`, () => {
 
-        it(`should protect the user from mass assignment`, () => {
+        it(`should protect the user from mass assignment when "attributes" are attempted to be filled`, () => {
+            class MockModel extends Model {}
+            expect(() => {
+                const model = new MockModel(attributes);
+            }).toThrowError(MassAssignmentError);
+        });
+
+        it(`should not protect the user from mass assignment when no "attributes" are beingfilled`, () => {
             class MockModel extends Model {}
             expect(() => {
                 const model = new MockModel();
-            }).toThrowError(MassAssignmentError);
+            }).not.toThrowError(MassAssignmentError);
         });
 
     });

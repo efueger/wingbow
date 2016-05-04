@@ -5,9 +5,9 @@ import { Extend } from '../utils/extend';
 import { hasOwn } from '../utils/has-own';
 import { getRaw, getRaws, setRaw, setRaws } from './store';
 import { intersectWithObj, intersectWithoutObj } from '../utils/intersect-obj';
-import { isDate, isFunction, isNumber, isString } from '../utils/is';
 import { Jsonable, JsonableObject, JsonSerializable } from '../utils/types';
 import { toLowerCase, toPascalCase, toSnakeCase, trim } from '../utils/str';
+import { isDate, isEmptyObject, isFunction, isNumber, isString } from '../utils/is';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from './errors';
 import { toArray, toBoolean, toJSON, toNumber, toObject, toString, toTimestamp } from '../utils/to';
 
@@ -106,6 +106,9 @@ export abstract class Model {
     }
 
     public fill(attributes :JsonableObject) :void {
+        if (isEmptyObject(attributes)) {
+            return;
+        }
         if (this.isWriteProtected()) {
             throw new MassAssignmentError();
         }

@@ -3,6 +3,7 @@ import {
     isArrayLike,
     isBoolean,
     isDate,
+    isEmptyObject,
     isError,
     isFunction,
     isNull,
@@ -135,6 +136,40 @@ describe(`is`, () => {
             expect(isDate(new String())).toBe(false);
             expect(isDate(``)).toBe(false);
             expect(isDate(undefined)).toBe(false);
+        });
+
+    });
+
+    describe(`isEmptyObject`, () => {
+
+        it(`should return "true" when passed an empty Object`, () => {
+            expect(isEmptyObject(new Object())).toBe(true);
+            expect(isEmptyObject({})).toBe(true);
+        });
+
+        it(`should return "false" when passed an Object that has properties`, () => {
+            expect(isEmptyObject({a: 1, b: 2, c: 3})).toBe(false);
+        });
+
+        it(`should return "false" when not passed an empty Object`, () => {
+            expect(isEmptyObject(new Array())).toBe(false);
+            expect(isEmptyObject([])).toBe(false);
+            expect(isEmptyObject(args)).toBe(false);
+            expect(isEmptyObject(arrLikeObj)).toBe(false);
+            expect(isEmptyObject(new Boolean())).toBe(false);
+            expect(isEmptyObject(true)).toBe(false);
+            expect(isEmptyObject(new Date())).toBe(false);
+            expect(isEmptyObject(new Error())).toBe(false);
+            expect(isEmptyObject(new Function())).toBe(false);
+            expect(isEmptyObject(function () {})).toBe(false);
+            expect(isEmptyObject(null)).toBe(false);
+            expect(isEmptyObject(new Number())).toBe(false);
+            expect(isEmptyObject(0)).toBe(false);
+            expect(isEmptyObject(new RegExp(`regexp`))).toBe(false);
+            expect(isEmptyObject(/regexp/)).toBe(false);
+            expect(isEmptyObject(new String())).toBe(false);
+            expect(isEmptyObject(``)).toBe(false);
+            expect(isEmptyObject(undefined)).toBe(false);
         });
 
     });

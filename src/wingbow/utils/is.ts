@@ -33,6 +33,16 @@ export function isDate(item :any) :item is Date {
     return getClass(item) === `date`;
 }
 
+export function isEmptyObject(item :any) :boolean {
+    if (!isObject(item)) {
+        return false;
+    }
+    for (let key in item) {
+        return false;
+    }
+    return true;
+}
+
 export function isError(item :any) :item is Error {
     return getClass(item) === `error`;
 }
