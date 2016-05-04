@@ -16,6 +16,16 @@ import { toArray, toBoolean, toJSON, toNumber, toObject, toString, toTimestamp }
 ])
 export abstract class Model {
 
+    static get [Symbol.species]() {
+        return this;
+    }
+
+    get [Symbol.toStringTag]() {
+        const Ctor = this.constructor[Symbol.species];
+        const name = Ctor.name;
+        return name;
+    }
+
     constructor(attributes :JsonableObject = {}) {
         this.syncOriginal();
         this.fill(attributes);

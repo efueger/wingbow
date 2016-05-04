@@ -18,9 +18,14 @@ export class ExtendableArray<T> extends BaseExtendableArray<T> {
         return this;
     }
 
+    get [Symbol.toStringTag]() {
+        const Ctor = this.constructor[Symbol.species];
+        const name = Ctor.name;
+        return name;
+    }
+
     constructor(...args :Array<T>) {
         super(...args);
-        this[Symbol.toStringTag] = this.constructor[Symbol.species].name;
     }
 
     public concat(...args :Array<(T | Array<T>)>) {

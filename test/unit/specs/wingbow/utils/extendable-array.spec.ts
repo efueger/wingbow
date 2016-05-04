@@ -18,6 +18,16 @@ describe(`ExtendableArray`, () => {
 
     });
 
+    describe(`[Symbol.toStringTag]`, () => {
+
+        it(`should return the name of the constructor`, () => {
+            const name = extArr[Symbol.toStringTag];
+            expect(name).toEqual(`ExtendableArray`);
+            expect(Object.prototype.toString.call(extArr)).toEqual(`[object ExtendableArray]`);
+        });
+
+    });
+
     describe(`concat`, () => {
 
         it(`should be able to "concat" a ExtendableArray`, () => {

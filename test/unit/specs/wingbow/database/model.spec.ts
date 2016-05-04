@@ -34,6 +34,25 @@ describe(`Model`, () => {
         model = new MockModel(attributes);
     });
 
+    describe(`[Symbol.species]`, () => {
+
+        it(`should return the constructor to use`, () => {
+            const ctor = Model[Symbol.species];
+            expect(ctor).toEqual(Model);
+        });
+
+    });
+
+    describe(`[Symbol.toStringTag]`, () => {
+
+        it(`should return the name of the constructor`, () => {
+            const name = model[Symbol.toStringTag];
+            expect(name).toEqual(`MockModel`);
+            expect(Object.prototype.toString.call(model)).toEqual(`[object MockModel]`);
+        });
+
+    });
+
     describe(`constructor`, () => {
 
         it(`should protect the user from mass assignment`, () => {
