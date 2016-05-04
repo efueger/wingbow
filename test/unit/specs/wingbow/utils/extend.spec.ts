@@ -32,7 +32,7 @@ let surrogateStaticPropObj = null;
 let surrogateProtoMethodFn = null;
 let surrogateProtoPropObj = null;
 
-describe(`extend`, () => {
+describe(`Extend`, () => {
 
     beforeEach(() => {
         parentCollisionMethodFn = function () {};
@@ -156,6 +156,15 @@ describe(`extend`, () => {
                 };
                 ChildConstructor = ParentConstructor.extend(childProtos, childStatics);
                 childInstance = new ChildConstructor;
+            });
+
+            it(`should throw when "$constructor" is not a Function`, () => {
+                expect(() => {
+                    childProtos = {
+                        $constructor: 123,
+                    };
+                    ParentConstructor.extend(childProtos);
+                }).toThrowError(TypeError);
             });
 
             describe(`methods and properties`, () => {

@@ -12,7 +12,7 @@ import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from './e
 import { toArray, toBoolean, toJSON, toNumber, toObject, toString, toTimestamp } from '../utils/to';
 
 @Trait([
-    Extend
+    Extend,
 ])
 export abstract class Model {
 

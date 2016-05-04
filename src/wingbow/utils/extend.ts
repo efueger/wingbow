@@ -1,27 +1,15 @@
 import { hasOwn } from './has-own';
-import { isString } from './is';
-
-function mapValueForDescriptor(values) {
-    return Object.keys(values).reduce((previous, current) => {
-        previous[current] = {
-            configurable: true,
-            enumerable: true,
-            value: values[current],
-            writable: true,
-        };
-        return previous;
-    }, {});
-}
+import { isFunction, isString } from './is';
 
 export interface RawProtoPropsInterface {
-    $constructor? :Function;
+    $constructor?(_super :Function) :Function;
 }
 
 export function Extend (Target) {
 
     Target.extend = (rawProtoProps :RawProtoPropsInterface = {}, staticProps :Object = {}, name? :string) :Function => {
 
-        let Child = null;
+        let Child :Function = null;
         const protoProps = mapValueForDescriptor(rawProtoProps);
 
         if (isString(name)) {
@@ -37,9 +25,12 @@ export function Extend (Target) {
 
         if (!Child) {
             if (hasOwn(rawProtoProps, `$constructor`)) {
+                if (!isFunction(rawProtoProps.$constructor)) {
+                    throw new TypeError(`Expected "$constructor" to be a function`);
+                }
                 Child = rawProtoProps.$constructor(Target);
             } else {
-                Child = function Child() { return Target.apply(this, arguments); };
+                Child = function Child() { Target.apply(this, arguments); };
             }
         }
 
@@ -53,4 +44,18 @@ export function Extend (Target) {
 
     };
 
+}
+
+////////////////////
+
+function mapValueForDescriptor(values) {
+    return Object.keys(values).reduce((previous, current) => {
+        previous[current] = {
+            configurable: true,
+            enumerable: true,
+            value: values[current],
+            writable: true,
+        };
+        return previous;
+    }, {});
 }
