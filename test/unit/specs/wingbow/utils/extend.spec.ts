@@ -59,11 +59,11 @@ describe(`extend`, () => {
 
     describe(`when called as a decorator`, () => {
 
-        it(`should be a Function`, function () {
+        it(`should be a Function`, () => {
             expect(isFunction(Extend)).toBe(true);
         });
 
-        it(`should add the "extend" method to a constructor`, function () {
+        it(`should add the "extend" method to a constructor`, () => {
             expect(isFunction(ParentConstructor.extend)).toBe(true);
         });
 

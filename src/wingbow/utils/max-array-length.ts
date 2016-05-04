@@ -1,1 +1,1 @@
-export const MAX_ARRAY_LENGTH = Math.pow(2, 32) - 1;
+export const MAX_ARRAY_LENGTH = 2 ** 32 - 1;

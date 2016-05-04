@@ -15,9 +15,13 @@ export interface BaseExtendableArray<T> {
     prototype :BaseExtendableArrayInstance<T>;
 }
 
-export const BaseExtendableArray :BaseExtendableArray<any> = function (...args) {
+export const BaseExtendableArray :BaseExtendableArray<any> = BaseExtendableArrayFn as any;
+
+function BaseExtendableArrayFn<T>(...args :Array<T>) :void {
+
     this.push.apply(this, args);
     let _length = 0;
+
     Object.defineProperty(this, 'length', {
         get: function () :number {
             let result = -1;
@@ -53,7 +57,8 @@ export const BaseExtendableArray :BaseExtendableArray<any> = function (...args) 
             _length = index;
         },
     });
-} as any;
+
+}
 
 BaseExtendableArray.prototype = Object.create(Array.prototype);
 BaseExtendableArray.prototype.constructor = BaseExtendableArray;
