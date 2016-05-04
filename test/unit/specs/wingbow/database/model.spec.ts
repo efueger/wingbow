@@ -5,21 +5,23 @@ import { NotImplementedError } from 'src/wingbow/utils/errors';
 import { Jsonable, JsonableObject } from 'src/wingbow/utils/types';
 import { IllegalCastTypeError, MassAssignmentError, NotFillableError } from 'src/wingbow/database/errors';
 
-class MockModel extends Model {
-    public callGetMutator(key :string, value :Jsonable) :Jsonable {
+class UnprotectedModel extends Model {
+    public /*unprotected*/ callGetMutator(key :string, value :Jsonable) :Jsonable {
         return super.callGetMutator(key, value);
     }
-    public castAttribute(key :string, value :Jsonable) :Jsonable {
+    public /*unprotected*/ castAttribute(key :string, value :Jsonable) :Jsonable {
         return super.castAttribute(key, value);
     }
-    public fillable() {
-        return [`a`, `b`, `c`];
-    }
-    public getAttributeValue(key :string) :any {
+    public /*unprotected*/ getAttributeValue(key :string) :any {
         return super.getAttributeValue(key);
     }
-    public getRelationValue(key :string) :void {
-        // super.getRelationValue(key); // Don't throw NotImplementedError
+    public /*unprotected*/ getRelationValue(key :string) :void {
+        // return super.getRelationValue(key); // Don't throw NotImplementedError
+    }
+}
+class MockModel extends UnprotectedModel {
+    public fillable() {
+        return [`a`, `b`, `c`];
     }
 }
 let attributes = {a: 1, b: 2, c: 3};
@@ -57,14 +59,14 @@ describe(`Model`, () => {
     describe(`constructor`, () => {
 
         it(`should protect the user from mass assignment when "attributes" are attempted to be filled`, () => {
-            class MockModel extends Model {}
+            class MockModel extends UnprotectedModel {}
             expect(() => {
                 const model = new MockModel(attributes);
             }).toThrowError(MassAssignmentError);
         });
 
         it(`should not protect the user from mass assignment when no "attributes" are beingfilled`, () => {
-            class MockModel extends Model {}
+            class MockModel extends UnprotectedModel {}
             expect(() => {
                 const model = new MockModel();
             }).not.toThrowError(MassAssignmentError);
@@ -102,7 +104,7 @@ describe(`Model`, () => {
     describe(`callGetMutator`, () => {
 
         it(`should mutate attribute getters`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`name`]; }
                 public getNameAttribute(value) { return value.toUpperCase(); }
             }
@@ -115,7 +117,7 @@ describe(`Model`, () => {
     describe(`callSetMutator`, () => {
 
         it(`should mutate attribute getters`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`birthday`]; }
                 public setBirthdayAttribute(value) { return Number(value); }
             }
@@ -128,7 +130,7 @@ describe(`Model`, () => {
     describe(`castAttribute`, () => {
 
         it(`should cast the attributes to their various types`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public casts() { return {a1: Array, a2: `array`, b1: Boolean, b2: `boolean`, d1: `date`, d2: Date, j1: JSON, j2: `json`, j3: `json`, n1: Number, n2: `number`, o1: Object, o2: `object`, s1: String, s2: `string`, t: `timestamp`}; }
                 public fillable() { return [`a1`, `a2`, `b1`, `b2`, `d1`, `d2`, `j1`, `j2`, `j3`, `n1`, `n2`, `o1`, `o2`, `s1`, `s2`, `t`]; }
             }
@@ -144,7 +146,7 @@ describe(`Model`, () => {
         it(`should throw when getting the attributes if the cast type is invalid`, () => {
             const AttributeExample = function () { this.localProp = false; };
             AttributeExample.prototype.protoProp = true;
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public casts() { return {a: AttributeExample}; }
                 public fillable() { return [`a`, `b`, `c`]; }
             }
@@ -188,7 +190,7 @@ describe(`Model`, () => {
         it(`should only fill non prototypal properties`, () => {
             const ProtoExample = function () { this.localProp = false; };
             ProtoExample.prototype.protoProp = true;
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`localProp`]; }
             }
             attributes = new ProtoExample();
@@ -205,7 +207,7 @@ describe(`Model`, () => {
         });
 
         it(`should not fill any non "fillable" attributes`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`a`, `d`]; }
             }
             const model = new MockModel(attributes);
@@ -227,10 +229,7 @@ describe(`Model`, () => {
         });
 
         it(`should call the mutator if one exists but the model does not have the given attribute`, () => {
-            class MockModel extends Model {
-                public callGetMutator(key :string, value :Jsonable) :Jsonable {
-                    return super.callGetMutator(key, value);
-                }
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`age`, `name`]; }
                 public getAgeAttribute(age) {
                     expect(age).toBe(undefined);
@@ -268,7 +267,7 @@ describe(`Model`, () => {
             const map = new Map();
             _mockStore(`attributes`, map);
             let that = null;
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 constructor(attributes :JsonableObject) {
                     super(attributes);
                     that = this;
@@ -293,14 +292,8 @@ describe(`Model`, () => {
     describe(`getAttributeValue`, () => {
 
         it(`should return the mutated attribute should a get mutator be set`, () => {
-            class MockModel extends Model {
-                public callGetMutator(key :string, value :Jsonable) :Jsonable {
-                    return super.callGetMutator(key, value);
-                }
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`marital`]; }
-                public getAttributeValue(key :string) :any {
-                    return super.getAttributeValue(key);
-                }
                 public getMaritalAttribute(value) {
                     expect(value).toBe(`divorced`);
                     return `single`;
@@ -315,15 +308,9 @@ describe(`Model`, () => {
         });
 
         it(`should return the mutated attribute should a get mutator be set`, () => {
-            class MockModel extends Model {
-                public castAttribute(key :string, value :Jsonable) :Jsonable {
-                    return super.castAttribute(key, value);
-                }
+            class MockModel extends UnprotectedModel {
                 public casts() { return {age: Number}; }
                 public fillable() { return [`age`]; }
-                public getAttributeValue(key :string) :any {
-                    return super.getAttributeValue(key);
-                }
             }
             const model = new MockModel({age: `21`});
             spyOn(model, `hasCast`).and.callThrough();
@@ -334,12 +321,9 @@ describe(`Model`, () => {
         });
 
         it(`should return the value as a Date if it exists in "dates()"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public dates() { return [`birthday`]; }
                 public fillable() { return [`birthday`]; }
-                public getAttributeValue(key :string) :any {
-                    return super.getAttributeValue(key);
-                }
             }
             const model = new MockModel({birthday: 946684800000});
             spyOn(model, `getDates`).and.callThrough();
@@ -362,7 +346,7 @@ describe(`Model`, () => {
     describe(`getCasts`, () => {
 
         it(`should throw if the cast type is "null" or "undefined"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public casts() { return {aaa: null, bbb: undefined}; }
                 public fillable() { return [`aaa`, `bbb`, `ccc`]; }
             }
@@ -372,7 +356,7 @@ describe(`Model`, () => {
         });
 
         it(`should include the "primary key" if the model is "incrementing()"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public casts() { return {a: String, b: `string`}; }
                 public fillable() { return [`a`, `b`, `c`]; }
                 public incrementing() { return true; }
@@ -382,7 +366,7 @@ describe(`Model`, () => {
         });
 
         it(`should not include the "primary key" if the model is not "incrementing()"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public casts() { return {a: String, b: `string`}; }
                 public fillable() { return [`a`, `b`, `c`]; }
                 public incrementing() { return false; }
@@ -394,7 +378,7 @@ describe(`Model`, () => {
         it(`should not include prototypal properties`, () => {
             const CastExample = function () { this.localProp = `string`; };
             CastExample.prototype.protoProp = `string`;
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public casts() { return new CastExample(); }
                 public fillable() { return [`a`, `b`, `c`]; }
             }
@@ -410,7 +394,7 @@ describe(`Model`, () => {
     describe(`getDates`, () => {
 
         it(`should include "createdAt()" and "updatedAt" if the model has "timestamps()"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public dates() { return [`birthday`]; }
                 public fillable() { return [`birthday`]; }
                 public timestamps() { return true; }
@@ -420,7 +404,7 @@ describe(`Model`, () => {
         });
 
         it(`should not include "createdAt()" and "updatedAt" if the model does not have "timestamps()"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public dates() { return [`birthday`]; }
                 public fillable() { return [`birthday`]; }
                 public timestamps() { return false; }
@@ -495,7 +479,7 @@ describe(`Model`, () => {
         });
 
         it(`should return "false" if the attribute is listed in "guarded()"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`a`, `b`, `c`]; }
                 public guarded() { return [`d`]; }
             }
@@ -504,7 +488,7 @@ describe(`Model`, () => {
         });
 
         it(`should throw if an attribute is not listed in "fillable()" or "guarded()"`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`a`, `b`, `c`]; }
                 public guarded() { return [`d`]; }
             }
@@ -572,7 +556,7 @@ describe(`Model`, () => {
         });
 
         it(`should convert the models attributes to a JSON string`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`a`, `b`, `c`]; }
             }
             const model = new MockModel(attributes);
@@ -580,7 +564,7 @@ describe(`Model`, () => {
         });
 
         it(`should not show hidden attributes`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`a`, `b`, `c`]; }
                 public hidden() { return [`b`]; }
             }
@@ -589,7 +573,7 @@ describe(`Model`, () => {
         });
 
         it(`should show visible attributes`, () => {
-            class MockModel extends Model {
+            class MockModel extends UnprotectedModel {
                 public fillable() { return [`a`, `b`, `c`]; }
                 public visible() { return [`c`]; }
             }
