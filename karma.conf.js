@@ -5,7 +5,7 @@ const path = require(`path`);
 const isCI = require(`./build/lib/is-ci`);
 const paths = require(`./build/config/paths`);
 
-/* eslint max-len: ["off"] */
+// /* eslint max-len: ["off"] */
 module.exports = function karmaConf(karma) {
 
     const config = {
