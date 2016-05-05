@@ -64,7 +64,7 @@ function release(filesRoot, filesDest, filesGlob, options) {
             .pipe($.uglify())
             .pipe(filterMaps.restore)
             .pipe($.rename(obj => {
-                /* eslint no-param-reassign: ["off"] */
+                // /* eslint no-param-reassign: ["off"] */
                 obj.basename = obj.basename.replace(
                     nameNoExt,
                     `${nameNoExt}.min`
